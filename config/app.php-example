@@ -1,0 +1,4 @@
+<?php
+
+define('DIR_APP', 'phonebook-api');
+define('DS', DIRECTORY_SEPARATOR);

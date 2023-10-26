@@ -6,6 +6,6 @@ class IndexController
 {
     public function __construct()
     {
-        echo '#IndexController';
+        dd('Olá, mundo!');
     }
 }
