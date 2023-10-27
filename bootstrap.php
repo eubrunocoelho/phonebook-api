@@ -15,6 +15,29 @@ $router->get('/', function () {
     return 'Olá, mundo!';
 });
 
+$router->get('/testing', 'Controller\IndexController::index')
+    ->before(function () {
+        $checkUserIsAuth = true;
+
+        if (!$checkUserIsAuth) {
+            http_response_code(401);
+
+            echo 'Você não está autenticado';
+        }
+
+        return $checkUserIsAuth;
+    })
+    ->before(function () {
+        echo 'Segundo middleware';
+
+        return true;
+    })
+    ->after(function () {
+        echo 'Finalização';
+
+        return true;
+    });
+
 $result = $router->handler();
 
 if (!$result) {
@@ -33,9 +56,13 @@ foreach ($data['before'] as $before) {
 
 if ($data['action'] instanceof Closure) {
     echo $data['action']($router->getParams());
-}
+} elseif (is_string($data['action'])) {
+    $data['action'] = explode('::', $data['action']);
+    $controller = new $data['action'][0];
+    $action = $data['action'][1];
 
-// ...
+    echo $controller->$action($router->getParams());
+}
 
 foreach ($data['after'] as $after) {
     if (!$after($router->getParams())) {

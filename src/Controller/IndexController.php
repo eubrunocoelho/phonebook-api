@@ -4,8 +4,8 @@ namespace Controller;
 
 class IndexController
 {
-    public function __construct()
+    public function index()
     {
-        dd('Olá, mundo!');
+        return 'Hello, world';
     }
 }
