@@ -19,7 +19,7 @@ class Dispatcher
         $result = $this->router->handler();
 
         if (!$result) {
-            echo '404';
+            http_response_code(404);
             die();
         }
 
@@ -32,19 +32,29 @@ class Dispatcher
         }
 
         if ($data['action'] instanceof Closure) {
-            echo $data['action']($this->router->getParams());
+            return $data['action']($this->router->getParams());
         } elseif (is_string($data['action'])) {
-            $data['action'] = explode('::', $data['action']);
-            $controller = new $data['action'][0];
-            $action = $data['action'][1];
+            $action = explode('::', $data['action']);
 
-            echo $controller->$action($this->router->getParams());
+            $controller = $action[0];
+            $action = $action[1];
+
+            $this->loadController($controller, $action);
         }
 
         foreach ($data['after'] as $after) {
             if (!$after($this->router->getParams())) {
                 die();
             }
+        }
+    }
+
+    public function loadController($controller, $action)
+    {
+        if (class_exists($controller) && method_exists($controller, $action)) {
+            $controller = new $controller;
+
+            return $controller->$action($this->router->getParams());
         }
     }
 }
