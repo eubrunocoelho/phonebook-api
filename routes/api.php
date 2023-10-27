@@ -1,7 +1,7 @@
 <?php
 
-$router->get('/', function () {
-    dd('Olá, mundo!');
+$router->get('/{ID}', function ($params) {
+    echo $params['ID'];
 });
 
 $router->get('/testing/{ID}', 'Controller\IndexController::index')

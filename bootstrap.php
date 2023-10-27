@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/functions/functions.php';
 require_once __DIR__ . '/config/app.php';
-require_once __DIR__ . '/src/lib/autoload.php';
+require_once __DIR__ . '/autoload.php';
 
 use lib\Dispatcher;
 use lib\Router;

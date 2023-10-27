@@ -77,20 +77,23 @@ class Router
         $route = str_replace('/', '\/', $route);
         preg_match_all('/\{([^{}}]*)\}/', $route, $matches);
 
-        foreach ($matches[0] as $key => $variables) {
+        foreach ($matches[0] as $key => $value) {
             $replacement = '([a-zA-Z0-9\-\_\ ]+)';
-            $route = str_replace($variables, $replacement, $route);
+            $route = str_replace($value, $replacement, $route);
+            $names[$key] = $matches[1][$key];
         }
 
         $route = preg_replace('/{([a-zA-Z]+)}/', '([a-zA-Z0-9+])', $route);
         $result = preg_match('/^' . $route . '$/', $path, $variables);
-
+        
         $params = [];
 
-        for ($i = 1; $i < count($variables); $i++) {
-            $params[] = $variables[$i];
+        if ($result > 0) {
+            foreach ($names as $key => $value) {
+                $params[$value] = $variables[$key + 1];
+            }
         }
-
+        
         $this->params = $params;
 
         return $result;
