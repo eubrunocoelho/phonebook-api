@@ -4,8 +4,8 @@ namespace Controller;
 
 class IndexController
 {
-    public function index()
+    public function index($params)
     {
-        return 'Hello, world';
+        dd($params);
     }
 }

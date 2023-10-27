@@ -15,7 +15,7 @@ $router->get('/', function () {
     return 'Olá, mundo!';
 });
 
-$router->get('/testing', 'Controller\IndexController::index')
+$router->get('/testing/{ID}', 'Controller\IndexController::index')
     ->before(function () {
         $checkUserIsAuth = true;
 

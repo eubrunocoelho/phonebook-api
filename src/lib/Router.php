@@ -74,18 +74,22 @@ class Router
 
     private function checkUrl($route, $path)
     {
-        preg_match_all('/\{([^\}]*)\}/', $route, $variables);
+        $route = str_replace('/', '\/', $route);
+        preg_match_all('/\{([^{}}]*)\}/', $route, $matches);
 
-        $regex = str_replace('/', '\/', $route);
-
-        foreach ($variables[0] as $k => $variable) {
+        foreach ($matches[0] as $key => $variables) {
             $replacement = '([a-zA-Z0-9\-\_\ ]+)';
-            $regex = str_replace($variable, $replacement, $regex);
+            $route = str_replace($variables, $replacement, $route);
         }
 
-        $regex = preg_replace('/{([a-zA-Z]+)}/', '([a-zA-Z0-9+])', $regex);
+        $route = preg_replace('/{([a-zA-Z]+)}/', '([a-zA-Z0-9+])', $route);
+        $result = preg_match('/^' . $route . '$/', $path, $variables);
 
-        $result = preg_match('/^' . $regex . '$/', $path, $params);
+        $params = [];
+
+        for ($i = 1; $i < count($variables); $i++) {
+            $params[] = $variables[$i];
+        }
 
         $this->params = $params;
 
