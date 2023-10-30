@@ -43,6 +43,11 @@ class Router
     public function add($method, $route, $action)
     {
         $this->routes[$method][$route] = new RouteEntity($action);
+        $this->routes['routes'][] = [
+            'method' => $method,
+            'route' => $route
+        ];
+
         return $this->routes[$method][$route];
     }
 
@@ -53,6 +58,10 @@ class Router
 
     public function handler()
     {
+        if ($this->checkDuplicates($this->routes['routes'])) {
+            return false;
+        }
+
         if (empty($this->routes[$this->method])) {
             return false;
         }
@@ -72,6 +81,21 @@ class Router
         return false;
     }
 
+    private function checkDuplicates($routes)
+    {
+        $combinations = array_map(function ($item) {
+            return $item["method"] . $item["route"];
+        }, $routes);
+
+        $count = array_count_values($combinations);
+
+        $duplicates = array_filter($count, function ($value) {
+            return $value > 1;
+        });
+
+        return (!empty($duplicates)) ? true : false;
+    }
+
     private function checkUrl($route, $path)
     {
         $route = str_replace('/', '\/', $route);
@@ -85,7 +109,7 @@ class Router
 
         $route = preg_replace('/{([a-zA-Z]+)}/', '([a-zA-Z0-9+])', $route);
         $result = preg_match('/^' . $route . '$/', $path, $variables);
-        
+
         $params = [];
 
         if ($result > 0) {
@@ -93,7 +117,7 @@ class Router
                 $params[$value] = $variables[$key + 1];
             }
         }
-        
+
         $this->params = $params;
 
         return $result;
