@@ -25,15 +25,10 @@ class Dispatcher
 
         $data = $result->getData();
 
-        foreach ($data['before'] as $before) {
-            if (!$before($this->router->getParams())) {
-                die();
-            }
-        }
+        foreach ($data['before'] as $before) if (!$before($this->router->getParams())) die();
 
-        if ($data['action'] instanceof Closure) {
-            $data['action']($this->router->getParams());
-        } elseif (is_string($data['action'])) {
+        if ($data['action'] instanceof Closure) $data['action']($this->router->getParams());
+        elseif (is_string($data['action'])) {
             $action = explode('::', $data['action']);
 
             $controller = $action[0];
@@ -42,18 +37,13 @@ class Dispatcher
             $this->loadController($controller, $action);
         }
 
-        foreach ($data['after'] as $after) {
-            if (!$after($this->router->getParams())) {
-                die();
-            }
-        }
+        foreach ($data['after'] as $after) if (!$after($this->router->getParams())) die();
     }
 
     public function loadController(string $controller, string $action): void
     {
         if (class_exists($controller) && method_exists($controller, $action)) {
             $controller = new $controller;
-
             $controller->$action($this->router->getParams());
         }
     }
