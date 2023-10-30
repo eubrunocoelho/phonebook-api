@@ -106,9 +106,7 @@ class Router
 
         $params = [];
 
-        if ($result > 0) foreach ($names as $key => $value) {
-            $params[$value] = $variables[$key + 1];
-        }
+        if ($result > 0) foreach ($names as $key => $value) $params[$value] = $variables[$key + 1];
 
         $this->params = $params;
 
