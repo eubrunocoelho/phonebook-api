@@ -2,6 +2,8 @@
 
 namespace lib;
 
+use Closure;
+
 class Router
 {
     private $routes = [];
@@ -9,38 +11,38 @@ class Router
     private $path;
     private $params;
 
-    public function __construct($method, $path)
+    public function __construct(string $method, string $path)
     {
         $this->method = $method;
         $this->path = $path;
     }
 
-    public function get($route, $action)
+    public function get(string $route, Closure|string $action): Object
     {
         return $this->add('GET', $route, $action);
     }
 
-    public function post($route, $action)
+    public function post(string $route, Closure|string $action): Object
     {
         return $this->add('POST', $route, $action);
     }
 
-    public function put($route, $action)
+    public function put(string $route, Closure|string $action): Object
     {
         return $this->add('PUT', $route, $action);
     }
 
-    public function patch($route, $action)
+    public function patch(string $route, Closure|string $action): Object
     {
         return $this->add('PATCH', $route, $action);
     }
 
-    public function delete($route, $action)
+    public function delete(string $route, Closure|string $action): Object
     {
         return $this->add('DELETE', $route, $action);
     }
 
-    public function add($method, $route, $action)
+    public function add(string $method, string $route, Closure|string $action): Object
     {
         $this->routes[$method][$route] = new RouteEntity($action);
         $this->routes['routes'][] = [
@@ -51,12 +53,12 @@ class Router
         return $this->routes[$method][$route];
     }
 
-    public function getParams()
+    public function getParams(): array|null
     {
         return $this->params;
     }
 
-    public function handler()
+    public function handler(): bool|Object
     {
         if ($this->checkDuplicates($this->routes['routes'])) {
             return false;
@@ -81,7 +83,7 @@ class Router
         return false;
     }
 
-    private function checkDuplicates($routes)
+    private function checkDuplicates(array $routes): bool
     {
         $combinations = array_map(function ($item) {
             return $item["method"] . $item["route"];
@@ -96,7 +98,7 @@ class Router
         return (!empty($duplicates)) ? true : false;
     }
 
-    private function checkUrl($route, $path)
+    private function checkUrl(string $route, string $path): int
     {
         $route = str_replace('/', '\/', $route);
         preg_match_all('/\{([^{}}]*)\}/', $route, $matches);

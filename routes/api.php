@@ -1,7 +1,7 @@
 <?php
 
-$router->get('/{ID}', function ($params) {
-    echo $params['ID'];
+$router->get('/', function ($params) {
+    return dd('Olá, mundo!');
 });
 
 $router->get('/testing/{ID}', 'Controller\IndexController::index')
@@ -11,7 +11,7 @@ $router->get('/testing/{ID}', 'Controller\IndexController::index')
         if (!$checkUserIsAuth) {
             http_response_code(401);
 
-            echo 'Você não está autenticado';
+            return dd('Você não está autenticado');
         }
 
         return $checkUserIsAuth;

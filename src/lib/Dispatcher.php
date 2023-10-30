@@ -14,7 +14,7 @@ class Dispatcher
         $this->router = $router;
     }
 
-    public function dispatch()
+    public function dispatch(): void
     {
         $result = $this->router->handler();
 
@@ -32,7 +32,7 @@ class Dispatcher
         }
 
         if ($data['action'] instanceof Closure) {
-            return $data['action']($this->router->getParams());
+            $data['action']($this->router->getParams());
         } elseif (is_string($data['action'])) {
             $action = explode('::', $data['action']);
 
@@ -49,12 +49,12 @@ class Dispatcher
         }
     }
 
-    public function loadController($controller, $action)
+    public function loadController(string $controller, string $action): void
     {
         if (class_exists($controller) && method_exists($controller, $action)) {
             $controller = new $controller;
 
-            return $controller->$action($this->router->getParams());
+            $controller->$action($this->router->getParams());
         }
     }
 }

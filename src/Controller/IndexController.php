@@ -6,6 +6,6 @@ class IndexController
 {
     public function index($params)
     {
-        dd($params);
+        return dd('Olá, mundo!');
     }
 }
