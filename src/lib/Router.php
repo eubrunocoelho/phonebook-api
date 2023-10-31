@@ -53,7 +53,7 @@ class Router
         return $this->routes[$method][$route];
     }
 
-    public function getParams(): array|null
+    public function getParams(): ?array
     {
         return $this->params;
     }
@@ -64,7 +64,8 @@ class Router
 
         if (empty($this->routes[$this->method])) return false;
 
-        if (isset($this->routes[$this->method][$this->path])) return $this->routes[$this->method][$this->path];
+        if (isset($this->routes[$this->method][$this->path]))
+            return $this->routes[$this->method][$this->path];
 
         foreach ($this->routes[$this->method] as $route => $action) {
             $result = $this->checkUrl($route, $this->path);
@@ -80,7 +81,7 @@ class Router
         $combinations = array_map(function ($item) {
             return $item["method"] . $item["route"];
         }, $routes);
-
+        
         $count = array_count_values($combinations);
 
         $duplicates = array_filter($count, function ($value) {
@@ -106,7 +107,9 @@ class Router
 
         $params = [];
 
-        if ($result > 0) foreach ($names as $key => $value) $params[$value] = $variables[$key + 1];
+        if ($result > 0)
+            foreach ($names as $key => $value)
+                $params[$value] = $variables[$key + 1];
 
         $this->params = $params;
 

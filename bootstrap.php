@@ -1,9 +1,10 @@
 <?php
 
 require_once __DIR__ . '/functions/functions.php';
-require_once __DIR__ . '/config/app.php';
+require_once __DIR__ . '/config/settings.php';
 require_once __DIR__ . '/autoload.php';
 
+use lib\ConnectionFactory;
 use lib\Dispatcher;
 use lib\Router;
 
