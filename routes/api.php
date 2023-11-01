@@ -1,28 +1,11 @@
 <?php
 
-$router->get('/', function ($params) {
-    return dd('Olá, mundo!');
-});
+use Middlewares\Cors;
 
-$router->get('/testing/{ID}', 'Controller\IndexController::index')
+$router->post('/users', 'Controller\AuthController::store')
     ->before(function () {
-        $checkUserIsAuth = true;
-
-        if (!$checkUserIsAuth) {
-            http_response_code(401);
-
-            return dd('Você não está autenticado');
-        }
-
-        return $checkUserIsAuth;
-    })
-    ->before(function () {
-        dd('middleware 2');
-
-        return true;
-    })
-    ->after(function () {
-        dd('middleware 3');
-
+        Cors::handleCorsHeaders($_SERVER['REQUEST_METHOD']);
         return true;
     });
+
+$router->get('/users', 'Controller\AuthController::index');

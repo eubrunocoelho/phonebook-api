@@ -1,6 +1,6 @@
 CREATE DATABASE phonebook_api;
 
-use phonebook_api;
+USE phonebook_api;
 
 CREATE TABLE users (
     id BIGINT NOT NULL AUTO_INCREMENT,
