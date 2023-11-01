@@ -17,38 +17,35 @@ class Router
         $this->path = $path;
     }
 
-    public function get(string $route, Closure|string $action): Object
+    public function get(string $route, Closure|string $action, $dependency = null): Object
     {
-        return $this->add('GET', $route, $action);
+        return $this->add('GET', $route, $action, $dependency, $dependency);
     }
 
-    public function post(string $route, Closure|string $action): Object
+    public function post(string $route, Closure|string $action, $dependency = null): Object
     {
-        return $this->add('POST', $route, $action);
+        return $this->add('POST', $route, $action, $dependency);
     }
 
-    public function put(string $route, Closure|string $action): Object
+    public function put(string $route, Closure|string $action, $dependency = null): Object
     {
-        return $this->add('PUT', $route, $action);
+        return $this->add('PUT', $route, $action, $dependency);
     }
 
-    public function patch(string $route, Closure|string $action): Object
+    public function patch(string $route, Closure|string $action, $dependency = null): Object
     {
-        return $this->add('PATCH', $route, $action);
+        return $this->add('PATCH', $route, $action, $dependency);
     }
 
-    public function delete(string $route, Closure|string $action): Object
+    public function delete(string $route, Closure|string $action, $dependency = null): Object
     {
-        return $this->add('DELETE', $route, $action);
+        return $this->add('DELETE', $route, $action, $dependency);
     }
 
-    public function add(string $method, string $route, Closure|string $action): Object
+    public function add(string $method, string $route, Closure|string $action, $dependency): Object
     {
-        $this->routes[$method][$route] = new RouteEntity($action);
-        $this->routes['routes'][] = [
-            'method' => $method,
-            'route' => $route
-        ];
+        $this->routes['routes'][] = ['method' => $method, 'route' => $route];
+        $this->routes[$method][$route] = new RouteEntity($action, $dependency);
 
         return $this->routes[$method][$route];
     }
@@ -81,7 +78,7 @@ class Router
         $combinations = array_map(function ($item) {
             return $item["method"] . $item["route"];
         }, $routes);
-        
+
         $count = array_count_values($combinations);
 
         $duplicates = array_filter($count, function ($value) {

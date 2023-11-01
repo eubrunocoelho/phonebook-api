@@ -8,12 +8,13 @@ class AuthController
 {
     private $resource;
 
-    public function __construct(JsonResource $resource)
+    public function __construct($dependency)
     {
-        $this->resource = $resource;
+        $this->resource = $dependency['Resources\JsonResource'];
     }
 
     public function store()
     {
+        $this->resource->toJson('Olá, mundo!');
     }
 }

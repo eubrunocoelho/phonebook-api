@@ -35,17 +35,17 @@ class Dispatcher
             $controller = $action[0];
             $action = $action[1];
 
-            $this->loadController($controller, $action);
+            $this->loadController($controller, $action, $data['dependency']);
         }
 
         foreach ($data['after'] as $after)
             if (!$after($this->router->getParams())) die();
     }
 
-    public function loadController(string $controller, string $action): void
+    public function loadController(string $controller, string $action, $dependency): void
     {
         if (class_exists($controller) && method_exists($controller, $action)) {
-            $controller = new $controller;
+            $controller = new $controller($dependency);
             $controller->$action($this->router->getParams());
         }
     }

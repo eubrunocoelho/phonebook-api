@@ -4,20 +4,8 @@ namespace Resources;
 
 class JsonResource
 {
-    protected $data;
-
-    public function __construct($data)
+    public function toJson($data)
     {
-        $this->data = $data;
-    }
-
-    public function toArray()
-    {
-        return $this->data;
-    }
-
-    public function toJson()
-    {
-        return json_encode($this->toArray());
+        echo json_encode($data);
     }
 }
