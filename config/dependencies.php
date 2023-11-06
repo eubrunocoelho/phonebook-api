@@ -1,7 +1,7 @@
 <?php
 
-//
+use Resources\JsonResource;
 
 return [
-    'Olá, mundo!'
+    JsonResource::class => new JsonResource()
 ];
