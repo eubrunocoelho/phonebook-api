@@ -8,4 +8,9 @@ abstract class Validators
     {
         return (strlen($value) > 0) ? true : false;
     }
+
+    protected function min($value, $ruleValue)
+    {
+        return (strlen($value) < $ruleValue) ? true : false;
+    }
 }

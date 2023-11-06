@@ -23,8 +23,17 @@ class Validation extends Validators
         foreach ($this->rules as $item => $rules) {
             foreach ($rules as $rule => $value) {
                 if ($rule == 'required') {
-                    if (!isset($this->data[$item]) || !parent::required($value)) {
+                    if ((!isset($this->data[$item]) || !parent::required($value)) &&
+                        $value
+                    ) {
                         $this->addError('O campo "' . $item . '" é obrigatório.');
+                    }
+                } elseif (isset($this->data[$item])) {
+                    switch ($rule) {
+                        case 'min':
+                            if (parent::min($this->data[$item], $value))
+                                $this->addError('O campo "' . $item . '" deve conter pelo menos ' . $value . ' caracteres.');
+                            break;
                     }
                 }
             }

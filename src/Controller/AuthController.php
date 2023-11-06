@@ -21,7 +21,7 @@ class AuthController
 
         $rules = [
             'name' => [
-                'required' => true,
+                'required' => false,
                 'min' => 3,
                 'max' => 255
             ]
