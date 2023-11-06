@@ -7,14 +7,12 @@ use Closure;
 class RouteEntity
 {
     private $action;
-    private $dependency;
     private $afterMiddleware = [];
     private $beforeMiddleware = [];
 
-    public function __construct(Closure|string $action, $dependency)
+    public function __construct(Closure|string $action)
     {
         $this->action = $action;
-        $this->dependency = $dependency;
     }
 
     public function before(Closure $middleware): Object
@@ -35,7 +33,6 @@ class RouteEntity
     {
         return [
             'action' => $this->action,
-            'dependency' => $this->dependency,
             'after' => $this->afterMiddleware,
             'before' => $this->beforeMiddleware
         ];

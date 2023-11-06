@@ -17,35 +17,35 @@ class Router
         $this->path = $path;
     }
 
-    public function get(string $route, Closure|string $action, $dependency = null): Object
+    public function get(string $route, Closure|string $action): Object
     {
-        return $this->add('GET', $route, $action, $dependency, $dependency);
+        return $this->add('GET', $route, $action);
     }
 
-    public function post(string $route, Closure|string $action, $dependency = null): Object
+    public function post(string $route, Closure|string $action): Object
     {
-        return $this->add('POST', $route, $action, $dependency);
+        return $this->add('POST', $route, $action);
     }
 
-    public function put(string $route, Closure|string $action, $dependency = null): Object
+    public function put(string $route, Closure|string $action): Object
     {
-        return $this->add('PUT', $route, $action, $dependency);
+        return $this->add('PUT', $route, $action);
     }
 
-    public function patch(string $route, Closure|string $action, $dependency = null): Object
+    public function patch(string $route, Closure|string $action): Object
     {
-        return $this->add('PATCH', $route, $action, $dependency);
+        return $this->add('PATCH', $route, $action);
     }
 
-    public function delete(string $route, Closure|string $action, $dependency = null): Object
+    public function delete(string $route, Closure|string $action): Object
     {
-        return $this->add('DELETE', $route, $action, $dependency);
+        return $this->add('DELETE', $route, $action);
     }
 
-    public function add(string $method, string $route, Closure|string $action, $dependency): Object
+    public function add(string $method, string $route, Closure|string $action): Object
     {
         $this->routes['routes'][] = ['method' => $method, 'route' => $route];
-        $this->routes[$method][$route] = new RouteEntity($action, $dependency);
+        $this->routes[$method][$route] = new RouteEntity($action);
 
         return $this->routes[$method][$route];
     }
