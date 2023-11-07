@@ -38,7 +38,8 @@ class AuthController
         ];
 
         $this->validate->validation($data, $rules);
-        
-        // return $this->resource->toJson(200, 'Olá, mundo!', ['index' => 'testando controller']);
+
+        if (!$this->validate->passed())
+            return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', $this->validate->getErrors());
     }
 }

@@ -11,12 +11,12 @@ abstract class Validators
 
     protected function min($value, $ruleValue)
     {
-        return (strlen($value) < $ruleValue) ? true : false;
+        return (!(strlen($value) < $ruleValue)) ? true : false;
     }
 
     protected function max($value, $ruleValue)
     {
-        return (strlen($value) > $ruleValue) ? true : false;
+        return (!(strlen($value) > $ruleValue)) ? true : false;
     }
 
     protected function email($value)

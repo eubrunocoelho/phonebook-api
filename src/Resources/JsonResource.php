@@ -4,14 +4,16 @@ namespace Resources;
 
 class JsonResource
 {
-    public function toJson(int $status, string $message, array $extra)
+    public function toJson(int $status, string $message, array $extra = [])
     {
-        $response = ['status' => $status];
+        $response['status'] = $status;
 
         if ($message) $response['message'] = $message;
 
         http_response_code($status);
 
         echo json_encode(array_merge($response, $extra));
+
+        die();
     }
 }
