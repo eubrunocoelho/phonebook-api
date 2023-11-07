@@ -13,4 +13,14 @@ abstract class Validators
     {
         return (strlen($value) < $ruleValue) ? true : false;
     }
+
+    protected function max($value, $ruleValue)
+    {
+        return (strlen($value) > $ruleValue) ? true : false;
+    }
+
+    protected function email($value)
+    {
+        return (filter_var($value, FILTER_VALIDATE_EMAIL)) ? true : false;
+    }
 }

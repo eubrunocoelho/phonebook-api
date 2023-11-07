@@ -6,13 +6,13 @@ class AuthController
 {
     private $jsonResource;
     private $jsonRequestService;
-    private $validation;
+    private $validate;
 
     public function __construct($dependency)
     {
         $this->jsonResource = $dependency['Resources\JsonResource'];
         $this->jsonRequestService = $dependency['Services\JsonRequestService'];
-        $this->validation = $dependency['Validation\Validation'];
+        $this->validate = $dependency['Validation\Validate'];
     }
 
     public function store()
@@ -20,21 +20,25 @@ class AuthController
         $data = array_map('trim', $this->jsonRequestService->getData());
 
         $rules = [
-            'name' => [
-                'required' => false,
+            'username' => [
+                'required' => true,
                 'min' => 3,
                 'max' => 255
+            ],
+            'email' => [
+                'required' => true,
+                'email' => true,
+                'max' => 128,
+            ],
+            'password' => [
+                'required' => true,
+                'min' => 8,
+                'max' => 128
             ]
         ];
 
-        $this->validation->setData($data);
-        $this->validation->setRules($rules);
-        $this->validation->validation();
+        $this->validate->validation($data, $rules);
         
-        dd($this->validation->getErrors());
-
-        // OK
-
         // return $this->resource->toJson(200, 'Olá, mundo!', ['index' => 'testando controller']);
     }
 }
