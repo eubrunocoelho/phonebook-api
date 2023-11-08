@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller;
+namespace Controllers;
 
 class AuthController
 {
@@ -38,8 +38,13 @@ class AuthController
         ];
 
         $this->validate->validation($data, $rules);
+        $_errors = $this->validate->getErrors();
+
+        foreach ($_errors as $key => $value) {
+            $errors[] = $value;
+        }
 
         if (!$this->validate->passed())
-            return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', $this->validate->getErrors());
+            return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ["errors" => $errors]);
     }
 }

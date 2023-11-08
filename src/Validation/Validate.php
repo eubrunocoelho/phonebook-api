@@ -43,7 +43,7 @@ class Validate extends Validators
 
     public function getErrors()
     {
-        return ['errors' => array_unique($this->errors)];
+        return array_unique($this->errors);
     }
 
     public function passed()
