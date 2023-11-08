@@ -13,32 +13,28 @@ class Validate extends Validators
                 $value = $data[$item] ?? null;
 
                 if ($rule == 'required' || is_null($value)) {
-                    if ($ruleValue && !parent::required($value)) {
-                        $this->addError('O campo \'' . $item . '\' é obrigatório.');
-                    }
-                } elseif (parent::required($value) /* quick-fix */) {
-                    switch ($rule) {
-                        case 'unique':
-                            if (!parent::unique($value, $ruleValue))
-                                $this->addError('Este \'' . $item . '\' já está cadastrado.');
-                            break;
-                        case 'min':
-                            if (!parent::min($value, $ruleValue))
-                                $this->addError('O campo \'' . $item . '\' deve conter pelo menos ' . $ruleValue . ' caracteres.');
-                            break;
-                        case 'max':
-                            if (!parent::max($value, $ruleValue))
-                                $this->addError('O campo \'' . $item . '\' deve conter no máximo ' . $ruleValue . ' caracteres.');
-                            break;
-                        case 'email':
-                            if (!parent::email($value))
-                                $this->addError('O endereço de e-mail está inválido.');
-                            break;
-                        case 'regex':
-                            if (!parent::regex($value, $ruleValue))
-                                $this->addError('O campo \'' . $item . '\' está inválido.');
-                            break;
-                    }
+                    if ($ruleValue && !parent::required($value)) $this->addError('O campo \'' . $item . '\' é obrigatório.');
+                } elseif (parent::required($value) /* quick-fix */) switch ($rule) {
+                    case 'unique':
+                        if (!parent::unique($value, $ruleValue))
+                            $this->addError('Este \'' . $item . '\' já está cadastrado.');
+                        break;
+                    case 'min':
+                        if (!parent::min($value, $ruleValue))
+                            $this->addError('O campo \'' . $item . '\' deve conter pelo menos ' . $ruleValue . ' caracteres.');
+                        break;
+                    case 'max':
+                        if (!parent::max($value, $ruleValue))
+                            $this->addError('O campo \'' . $item . '\' deve conter no máximo ' . $ruleValue . ' caracteres.');
+                        break;
+                    case 'email':
+                        if (!parent::email($value))
+                            $this->addError('O endereço de e-mail está inválido.');
+                        break;
+                    case 'regex':
+                        if (!parent::regex($value, $ruleValue))
+                            $this->addError('O campo \'' . $item . '\' está inválido.');
+                        break;
                 }
             }
         }

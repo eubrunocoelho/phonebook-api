@@ -58,11 +58,9 @@ class Router
     public function handler(): bool|Object
     {
         if ($this->checkDuplicates($this->routes['routes'])) return false;
-
         if (empty($this->routes[$this->method])) return false;
 
-        if (isset($this->routes[$this->method][$this->path]))
-            return $this->routes[$this->method][$this->path];
+        if (isset($this->routes[$this->method][$this->path])) return $this->routes[$this->method][$this->path];
 
         foreach ($this->routes[$this->method] as $route => $action) {
             $result = $this->checkUrl($route, $this->path);
@@ -104,9 +102,8 @@ class Router
 
         $params = [];
 
-        if ($result > 0)
-            foreach ($names as $key => $value)
-                $params[$value] = $variables[$key + 1];
+        if ($result > 0) foreach ($names as $key => $value)
+            $params[$value] = $variables[$key + 1];
 
         $this->params = $params;
 

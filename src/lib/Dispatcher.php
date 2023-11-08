@@ -30,9 +30,7 @@ class Dispatcher
         foreach ($data['before'] as $before)
             if (!$before($this->router->getParams())) die();
 
-        if ($data['action'] instanceof Closure)
-            $data['action']($this->router->getParams(), $this->dependencies);
-
+        if ($data['action'] instanceof Closure) $data['action']($this->router->getParams(), $this->dependencies);
         elseif (is_string($data['action'])) {
             $action = explode('::', $data['action']);
             $controller = $action[0];

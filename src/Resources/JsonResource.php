@@ -13,7 +13,6 @@ class JsonResource
         http_response_code($status);
 
         echo json_encode(array_merge($response, $extra));
-
         die();
     }
 }
