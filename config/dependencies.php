@@ -7,5 +7,5 @@ use Validation\Validate;
 return [
     JsonResource::class => new JsonResource(),
     JsonRequestService::class => new JsonRequestService(),
-    Validate::class => new Validate(),
+    Validate::class => new Validate()
 ];

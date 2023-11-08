@@ -23,4 +23,9 @@ abstract class Validators
     {
         return (filter_var($value, FILTER_VALIDATE_EMAIL)) ? true : false;
     }
+
+    protected function regex($value, $ruleValue)
+    {
+        return (preg_match($ruleValue, $value)) ? true : false;
+    }
 }

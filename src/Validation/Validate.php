@@ -30,6 +30,10 @@ class Validate extends Validators
                             if (!parent::email($value))
                                 $this->addError('O endereço de e-mail está inválido.');
                             break;
+                        case 'regex':
+                            if (!parent::regex($value, $ruleValue))
+                                $this->addError('O campo \'' . $item . '\' está inválido.');
+                            break;
                     }
                 }
             }
