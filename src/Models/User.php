@@ -6,6 +6,7 @@ class User
 {
     private $id;
     private $username;
+    private $email;
     private $password;
 
     public function setId($id)
@@ -26,6 +27,16 @@ class User
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
     }
 
     public function setPassword($password)

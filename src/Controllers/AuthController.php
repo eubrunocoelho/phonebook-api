@@ -48,13 +48,22 @@ class AuthController
         ];
 
         $this->validate->validation($data, $rules);
-        $_errors = $this->validate->getErrors();
+        $_errors = $this->validate->getErrors() ?? [];
 
         foreach ($_errors as $key => $value) {
             $errors[] = $value;
         }
-        
-        if (!$this->validate->passed())
-            return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ["errors" => $errors]);
+
+        if ($this->validate->passed()) {
+            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            
+            $User->setUsername($data['username']);
+            $User->setEmail($data['email']);
+            $User->setPassword($data['password']);
+            $result = $UserDAO->register($User);
+
+            if ($result) $this->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!');
+
+        } else return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ["errors" => $errors]);
     }
 }
