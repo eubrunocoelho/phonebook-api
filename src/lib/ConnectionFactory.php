@@ -9,7 +9,7 @@ class ConnectionFactory
 {
     private static $connection;
 
-    public static function getConnection()
+    public static function getConnection(): PDO
     {
         if (self::$connection === null) {
             try {

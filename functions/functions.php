@@ -1,7 +1,7 @@
 <?php
 
 if (!function_exists('dd')) {
-    function dd($params = [], $die = false)
+    function dd(array|string $params = [], bool $die = false): void
     {
         echo '<pre>';
         var_dump($params);

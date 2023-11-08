@@ -6,7 +6,7 @@ class Validate extends Validators
 {
     private $errors;
 
-    public function validation($data, $rules)
+    public function validation(array $data, array $rules): void
     {
         foreach ($rules as $item => $rules) {
             foreach ($rules as $rule => $ruleValue) {
@@ -44,19 +44,19 @@ class Validate extends Validators
         }
     }
 
-    private function addError($message)
+    private function addError(string $message): void
     {
         $this->errors[] = $message;
     }
 
-    public function getErrors()
+    public function getErrors(): array
     {
         $errors = ($this->errors != null) ? array_unique($this->errors) : [];
 
         return $errors;
     }
 
-    public function passed()
+    public function passed(): bool
     {
         return (empty($this->errors)) ? true : false;
     }

@@ -4,7 +4,7 @@ namespace Middlewares;
 
 class Cors
 {
-    public static function handleCorsHeaders(string $method)
+    public static function handleCorsHeaders(string $method): void
     {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: access');

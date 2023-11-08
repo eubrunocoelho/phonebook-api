@@ -5,6 +5,7 @@ namespace Controllers;
 use lib\ConnectionFactory;
 use Models\User;
 use Models\DAO\UserDAO;
+use Resources\JsonResource;
 
 class AuthController
 {
@@ -21,7 +22,7 @@ class AuthController
         $this->connection = ConnectionFactory::getConnection();
     }
 
-    public function store()
+    public function store(): JsonResource
     {
         $UserDAO = new UserDAO($this->connection);
         $User = new User();
@@ -55,11 +56,7 @@ class AuthController
         foreach ($_errors as $key => $value) {
             $errors[] = $value;
         }
-
-        dd($errors);
-
-        die();
-
+        
         if ($this->validate->passed()) {
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
             

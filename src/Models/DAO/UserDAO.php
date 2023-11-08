@@ -9,12 +9,12 @@ class UserDAO
 {
     private $database;
 
-    public function __construct($database)
+    public function __construct(PDO $database)
     {
         $this->database = $database;
     }
 
-    public function register(User $User)
+    public function register(User $User): bool
     {
         $SQL = 'INSERT INTO users (username, email, password) VALUES (:username, :email, :password);';
         

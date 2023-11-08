@@ -7,32 +7,32 @@ use PDO;
 
 abstract class Validators
 {
-    protected function required($value)
+    protected function required(int|string $value): bool
     {
         return (strlen($value) > 0) ? true : false;
     }
 
-    protected function min($value, $ruleValue)
+    protected function min(int|string $value, bool|int|string $ruleValue): bool
     {
         return (!(strlen($value) < $ruleValue)) ? true : false;
     }
 
-    protected function max($value, $ruleValue)
+    protected function max(int|string $value, bool|int|string $ruleValue): bool
     {
         return (!(strlen($value) > $ruleValue)) ? true : false;
     }
 
-    protected function email($value)
+    protected function email(int|string $value): bool
     {
         return (filter_var($value, FILTER_VALIDATE_EMAIL)) ? true : false;
     }
 
-    protected function regex($value, $ruleValue)
+    protected function regex(int|string $value, bool|int|string $ruleValue): bool
     {
         return (preg_match($ruleValue, $value)) ? true : false;
     }
 
-    protected function unique($value, $ruleValue)
+    protected function unique(int|string $value, bool|int|string $ruleValue): bool
     {
         $ex = explode('|', $ruleValue);
         $database = ConnectionFactory::getConnection();

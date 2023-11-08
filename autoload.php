@@ -1,6 +1,6 @@
 <?php
 
-function autoload($class)
+function autoload($class): void
 {
     $dirBase = DIR_APP;
     $class = $dirBase . 'src' . DS . str_replace('\\', DS, $class) . '.php';
