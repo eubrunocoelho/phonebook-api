@@ -33,12 +33,14 @@ class AuthController
                 'required' => true,
                 'min' => 3,
                 'max' => 255,
+                'unique' => 'username|users',
                 'regex' => '/^[a-zA-Z_][a-zA-Z0-9_]*$/'
             ],
             'email' => [
                 'required' => true,
                 'email' => true,
                 'max' => 128,
+                'unique' => 'email|users'
             ],
             'password' => [
                 'required' => true,
@@ -53,6 +55,10 @@ class AuthController
         foreach ($_errors as $key => $value) {
             $errors[] = $value;
         }
+
+        dd($errors);
+
+        die();
 
         if ($this->validate->passed()) {
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);

@@ -2,6 +2,9 @@
 
 namespace Validation;
 
+use lib\ConnectionFactory;
+use PDO;
+
 abstract class Validators
 {
     protected function required($value)
@@ -27,5 +30,18 @@ abstract class Validators
     protected function regex($value, $ruleValue)
     {
         return (preg_match($ruleValue, $value)) ? true : false;
+    }
+
+    protected function unique($value, $ruleValue)
+    {
+        $ex = explode('|', $ruleValue);
+        $database = ConnectionFactory::getConnection();
+
+        $SQL = 'SELECT * FROM ' . $ex[1] . ' WHERE ' . $ex[0] . ' = :value;';
+        $stmt = $database->prepare($SQL);
+        $stmt->bindValue(':value', $value, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return (!$stmt->rowCount() > 0) ? true : false;
     }
 }
