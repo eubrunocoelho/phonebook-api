@@ -13,6 +13,7 @@ class Exceptions extends Exception
         $response['status'] = $this->getCode();
         $response['message'] = $this->getMessage();
 
+        header_remove();
         header('Content-Type: application/json; charset=UTF-8');
 
         http_response_code($this->getCode());

@@ -28,7 +28,7 @@ class AuthController
         $User = new User();
 
         $data = array_map('trim', $this->jsonRequestService->getData());
-
+        
         $rules = [
             'username' => [
                 'required' => true,
