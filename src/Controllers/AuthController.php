@@ -94,9 +94,10 @@ class AuthController
             $result = $UserDAO->getUserByUsernameOrEmail($User);
 
             if (!empty($result)) {
-                if (!password_verify($data['password'], $result['password']))
-                    return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
-            } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos');
+                if (password_verify($data['password'], $result['password'])) {
+                    // ...
+                } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
+            } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
         } else return $this->jsonResource->toJson(422, 'Erro ao tentar autenticar o usuário.', ['errors' => $errors]);
     }
 }
