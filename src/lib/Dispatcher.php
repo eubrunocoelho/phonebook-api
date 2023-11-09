@@ -3,6 +3,8 @@
 namespace lib;
 
 use Closure;
+use Exception;
+use Exceptions\Exceptions;
 use lib\Router;
 
 class Dispatcher
@@ -18,11 +20,10 @@ class Dispatcher
 
     public function dispatch(): void
     {
-        $result = $this->router->handler();
-
-        if (!$result) {
-            http_response_code(404);
-            die();
+        try {
+            $result = $this->router->handler();
+        } catch (Exception $e) {
+            throw new Exceptions($e->getMessage(), $e->getCode(), $e);
         }
 
         $data = $result->getData();

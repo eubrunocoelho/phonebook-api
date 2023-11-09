@@ -16,6 +16,8 @@ class ConnectionFactory
                 $dsn = DB_DRIVER . ':host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME;
                 self::$connection = new PDO($dsn, DB_USERNAME, DB_PASSWORD);
             } catch (PDOException $e) {
+                http_response_code($e->getCode());
+                
                 echo 'Erro na conexão com o banco de dados: ' . $e->getMessage();
                 die();
             }
