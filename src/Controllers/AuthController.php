@@ -14,7 +14,7 @@ class AuthController
     private $validate;
     private $connection;
 
-    public function __construct($dependency)
+    public function __construct(array $dependency)
     {
         $this->jsonResource = $dependency['Resources\JsonResource'];
         $this->jsonRequestService = $dependency['Services\JsonRequestService'];
