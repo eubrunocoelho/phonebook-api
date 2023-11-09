@@ -68,7 +68,7 @@ class AuthController
         } else return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ['errors' => $errors]);
     }
 
-    public function login()
+    public function login(): JsonResource
     {
         $UserDAO = new UserDAO($this->connection);
         $User = new User();
@@ -93,7 +93,10 @@ class AuthController
             $User->setUser($data['username']);
             $result = $UserDAO->getUserByUsernameOrEmail($User);
 
-            dd($result);
+            if (!empty($result)) {
+                if (!password_verify($data['password'], $result['password']))
+                    return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
+            } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos');
         } else return $this->jsonResource->toJson(422, 'Erro ao tentar autenticar o usuário.', ['errors' => $errors]);
     }
 }
