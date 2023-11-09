@@ -13,8 +13,8 @@ class Validate extends Validators
                 $value = $data[$item] ?? null;
 
                 if ($rule == 'required' || is_null($value)) {
-                    if ($ruleValue && !parent::required($value)) $this->addError('O campo \'' . $item . '\' é obrigatório.');
-                } elseif (parent::required($value) /* quick-fix */) switch ($rule) {
+                    if ($ruleValue && parent::isEmpty($value)) $this->addError('O campo \'' . $item . '\' é obrigatório.');
+                } elseif (!parent::isEmpty($value)) switch ($rule) {
                     case 'unique':
                         if (!parent::unique($value, $ruleValue))
                             $this->addError('Este \'' . $item . '\' já está cadastrado.');

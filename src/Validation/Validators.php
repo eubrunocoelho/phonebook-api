@@ -7,9 +7,9 @@ use PDO;
 
 abstract class Validators
 {
-    protected function required(int|string $value): bool
+    protected function isEmpty(int|string $value): bool
     {
-        return (strlen($value) > 0) ? true : false;
+        return (!(strlen($value) > 0)) ? true : false;
     }
 
     protected function min(int|string $value, bool|int|string $ruleValue): bool
