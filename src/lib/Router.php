@@ -56,7 +56,7 @@ class Router
         return $this->params;
     }
 
-    public function handler(): ?Object
+    public function handler(): Object
     {
         if ($this->checkDuplicates($this->routes['routes']))
             throw new Exceptions('Houve um erro interno.', 500);

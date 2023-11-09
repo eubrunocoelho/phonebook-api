@@ -13,6 +13,6 @@ class JsonRequestService
 
         if (json_last_error() !== JSON_ERROR_NONE) throw new Exceptions('Houve um erro interno.', 500);
 
-        return $data;
+        return array_map('trim', $data);
     }
 }

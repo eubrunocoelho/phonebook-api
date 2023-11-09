@@ -22,13 +22,13 @@ class AuthController
         $this->connection = ConnectionFactory::getConnection();
     }
 
-    public function store(): JsonResource
+    public function register(): JsonResource
     {
         $UserDAO = new UserDAO($this->connection);
         $User = new User();
 
         $data = array_map('trim', $this->jsonRequestService->getData());
-        
+
         $rules = [
             'username' => [
                 'required' => true,
@@ -66,5 +66,9 @@ class AuthController
             if ($result) return $this->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!');
             else return $this->jsonResource->toJson(500, 'Houve um erro interno.');
         } else return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ["errors" => $errors]);
+    }
+
+    public function login()
+    {
     }
 }
