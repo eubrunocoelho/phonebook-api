@@ -27,7 +27,7 @@ class AuthController
         $UserDAO = new UserDAO($this->connection);
         $User = new User();
 
-        $data = array_map('trim', $this->jsonRequestService->getData());
+        $data = $this->jsonRequestService->getData();
 
         $rules = [
             'username' => [
@@ -65,10 +65,35 @@ class AuthController
 
             if ($result) return $this->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!');
             else return $this->jsonResource->toJson(500, 'Houve um erro interno.');
-        } else return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ["errors" => $errors]);
+        } else return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ['errors' => $errors]);
     }
 
     public function login()
     {
+        $UserDAO = new UserDAO($this->connection);
+        $User = new User();
+
+        $data = $this->jsonRequestService->getData();
+
+        $rules = [
+            'username' => [
+                'required' => true
+            ],
+            'password' => [
+                'required' => true
+            ]
+        ];
+
+        $this->validate->validation($data, $rules);
+        $_errors = $this->validate->getErrors() ?? [];
+
+        foreach ($_errors as $key => $value) $errors[] = $value;
+
+        if ($this->validate->passed()) {
+            $User->setUser($data['username']);
+            $result = $UserDAO->getUserByUsernameOrEmail($User);
+
+            dd($result);
+        } else return $this->jsonResource->toJson(422, 'Erro ao tentar autenticar o usuário.', ['errors' => $errors]);
     }
 }

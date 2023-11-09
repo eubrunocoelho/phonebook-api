@@ -5,6 +5,7 @@ namespace Models;
 class User
 {
     private $id;
+    private $user;
     private $username;
     private $email;
     private $password;
@@ -17,6 +18,16 @@ class User
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setUser(string $user): void
+    {
+        $this->user = $user;
+    }
+
+    public function getUser(): string
+    {
+        return $this->user;
     }
 
     public function setUsername(string $username): void
