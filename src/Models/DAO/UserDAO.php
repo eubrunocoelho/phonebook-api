@@ -35,6 +35,6 @@ class UserDAO
         $stmt->bindValue(':user', $User->getUser(), PDO::PARAM_STR);
         $stmt->execute();
 
-        return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : [];
+        return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
     }
 }

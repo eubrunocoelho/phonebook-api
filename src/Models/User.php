@@ -50,12 +50,12 @@ class User
         return $this->email;
     }
 
-    public function setPassword(int|string $password): void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
 
-    public function getPassword(): int|string
+    public function getPassword(): string
     {
         return $this->password;
     }

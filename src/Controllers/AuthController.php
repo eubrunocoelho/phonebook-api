@@ -93,7 +93,7 @@ class AuthController
             $User->setUser($data['username']);
             $result = $UserDAO->getUserByUsernameOrEmail($User);
 
-            if (!empty($result)) {
+            if (!$result) {
                 if (password_verify($data['password'], $result['password'])) {
                     // ...
                 } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
