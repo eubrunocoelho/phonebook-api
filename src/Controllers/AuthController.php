@@ -3,8 +3,10 @@
 namespace Controllers;
 
 use lib\ConnectionFactory;
-use Models\User;
+use Models\DAO\TokenDAO;
 use Models\DAO\UserDAO;
+use Models\Token;
+use Models\User;
 use Resources\JsonResource;
 
 class AuthController
@@ -68,10 +70,12 @@ class AuthController
         } else return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ['errors' => $errors]);
     }
 
-    public function login(): JsonResource
+    public function login()//: JsonResource
     {
         $UserDAO = new UserDAO($this->connection);
         $User = new User();
+        $TokenDAO = new TokenDAO($this->connection);
+        $Token = new Token();
 
         $data = $this->jsonRequestService->getData();
 
@@ -93,8 +97,25 @@ class AuthController
             $User->setUser($data['username']);
             $result = $UserDAO->getUserByUsernameOrEmail($User);
 
-            if (!$result) {
+            if ($result) {
                 if (password_verify($data['password'], $result['password'])) {
+                    $Token->setUserId($result['id']);
+                    $tokenResult = $TokenDAO->getTokenByUserId($Token);
+                    
+                    if (!$tokenResult) {
+                        unset($tokenResult);
+
+                        $userId = $result['id'];
+                        $token = bin2hex(random_bytes(16));
+                        $expirationDate = date('Y-m-d H:i:s', strtotime('+3 days'));
+                        
+                        $Token->setUserId($userId);
+                        $Token->setToken($token);
+                        $Token->setExpirationDate($expirationDate);
+                        $tokenResult = $TokenDAO->register($Token);
+
+                        dd($tokenResult);
+                    }
                     // ...
                 } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
             } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
