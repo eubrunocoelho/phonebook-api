@@ -33,9 +33,9 @@ class Dispatcher
 
         if ($data['action'] instanceof Closure) $data['action']($this->router->getParams(), $this->dependencies);
         elseif (is_string($data['action'])) {
-            $action = explode('::', $data['action']);
-            $controller = $action[0];
-            $action = $action[1];
+            $ex = explode('::', $data['action']);
+            $controller = $ex[0];
+            $action = $ex[1];
 
             $this->loadController($controller, $action, $this->dependencies);
         }
