@@ -70,7 +70,7 @@ class AuthController
         } else return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ['errors' => $errors]);
     }
 
-    public function login()//: JsonResource
+    public function login() //: JsonResource
     {
         $UserDAO = new UserDAO($this->connection);
         $User = new User();
@@ -99,31 +99,45 @@ class AuthController
 
             if ($result) {
                 if (password_verify($data['password'], $result['password'])) {
+                    unset($result['password']);
+
                     $Token->setUserId($result['id']);
-                    $tokenResult = $TokenDAO->getTokenByUserIdAndExpirationDate($Token);
+                    $resultToken = $TokenDAO->getTokenByUserIdAndExpirationDate($Token);
 
                     $userId = $result['id'];
                     $token = bin2hex(random_bytes(16));
                     $expirationDate = date('Y-m-d H:i:s', strtotime('+3 days'));
-                    
-                    if (!$tokenResult) {
-                        $tokenResult = $TokenDAO->getTokenByUserId($Token);
 
-                        if ($tokenResult) {
-                            $Token->setUserId($userId);
-                            $Token->setToken($token);
-                            $Token->setExpirationDate($expirationDate);
-                            $tokenResult = $TokenDAO->update($Token);
+                    $Token->setUserId($userId);
+                    $Token->setToken($token);
+                    $Token->setExpirationDate($expirationDate);
 
-                            dd('update', true);
+                    if (!$resultToken) {
+                        $resultToken = $TokenDAO->getTokenByUserId($Token);
+
+                        if ($resultToken) {
+                            $resultToken = $TokenDAO->update($Token);
+
+                            if ($resultToken) $resultToken = $TokenDAO->getTokenByUserId($Token);
+                            else return $this->jsonResource->toJson(500, 'Houve um erro interno.');
+
+                            $result['token'] = $resultToken['token'];
+
+                            return $this->jsonResource->toJson(200, 'Usuário autenticado com sucesso!', ['data' => $result]);
                         } else {
-                            $Token->setUserId($userId);
-                            $Token->setToken($token);
-                            $Token->setExpirationDate($expirationDate);
-                            $tokenResult = $TokenDAO->register($Token);
+                            $resultToken = $TokenDAO->register($Token);
 
-                            dd('register', true);
+                            if ($resultToken) $resultToken = $TokenDAO->getTokenByUserId($Token);
+                            else return $this->jsonResource->toJson(500, 'Houve um erro interno.');
+
+                            $result['token'] = $resultToken['token'];
+
+                            return $this->jsonResource->toJson(200, 'Usuário autenticado com sucesso!', ['data' => $result]);
                         }
+                    } else {
+                        $result['token'] = $resultToken['token'];
+
+                        return $this->jsonResource->toJson(200, 'Usuário autenticado com sucesso!', ['data' => $result]);
                     }
                 } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
             } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
