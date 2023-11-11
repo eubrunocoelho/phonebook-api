@@ -12,7 +12,7 @@ CREATE TABLE users (
 
 CREATE TABLE tokens (
     id BIGINT NOT NULL AUTO_INCREMENT,
-    user_id BIGINT NOT NULL,
+    user_id BIGINT UNIQUE NOT NULL,
     token VARCHAR(255) NOT NULL,
     expiration_date DATETIME NOT NULL,
     PRIMARY KEY (id),
