@@ -100,23 +100,31 @@ class AuthController
             if ($result) {
                 if (password_verify($data['password'], $result['password'])) {
                     $Token->setUserId($result['id']);
-                    $tokenResult = $TokenDAO->getTokenByUserId($Token);
+                    $tokenResult = $TokenDAO->getTokenByUserIdAndExpirationDate($Token);
+
+                    $userId = $result['id'];
+                    $token = bin2hex(random_bytes(16));
+                    $expirationDate = date('Y-m-d H:i:s', strtotime('+3 days'));
                     
                     if (!$tokenResult) {
-                        unset($tokenResult);
+                        $tokenResult = $TokenDAO->getTokenByUserId($Token);
 
-                        $userId = $result['id'];
-                        $token = bin2hex(random_bytes(16));
-                        $expirationDate = date('Y-m-d H:i:s', strtotime('+3 days'));
-                        
-                        $Token->setUserId($userId);
-                        $Token->setToken($token);
-                        $Token->setExpirationDate($expirationDate);
-                        $tokenResult = $TokenDAO->register($Token);
+                        if ($tokenResult) {
+                            $Token->setUserId($userId);
+                            $Token->setToken($token);
+                            $Token->setExpirationDate($expirationDate);
+                            $tokenResult = $TokenDAO->update($Token);
 
-                        dd($tokenResult);
+                            dd('update', true);
+                        } else {
+                            $Token->setUserId($userId);
+                            $Token->setToken($token);
+                            $Token->setExpirationDate($expirationDate);
+                            $tokenResult = $TokenDAO->register($Token);
+
+                            dd('register', true);
+                        }
                     }
-                    // ...
                 } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
             } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
         } else return $this->jsonResource->toJson(422, 'Erro ao tentar autenticar o usuário.', ['errors' => $errors]);
