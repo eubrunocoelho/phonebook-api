@@ -14,6 +14,17 @@ class UserDAO
         $this->database = $database;
     }
 
+    public function getUserByUsernameOrEmail(User $User): array|bool
+    {
+        $SQL = 'SELECT * FROM users WHERE email = :user OR username = :user LIMIT 1;';
+
+        $stmt = $this->database->prepare($SQL);
+        $stmt->bindValue(':user', $User->getUser(), PDO::PARAM_STR);
+        $stmt->execute();
+
+        return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
+    }
+
     public function register(User $User): bool
     {
         $SQL = 'INSERT INTO users (username, email, password) VALUES (:username, :email, :password);';
@@ -25,16 +36,5 @@ class UserDAO
         $stmt->execute();
 
         return ($stmt->rowCount() > 0) ? true : false;
-    }
-
-    public function getUserByUsernameOrEmail(User $User): array|bool
-    {
-        $SQL = 'SELECT * FROM users WHERE email = :user OR username = :user LIMIT 1;';
-
-        $stmt = $this->database->prepare($SQL);
-        $stmt->bindValue(':user', $User->getUser(), PDO::PARAM_STR);
-        $stmt->execute();
-
-        return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
     }
 }
