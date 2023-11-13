@@ -36,6 +36,17 @@ class TokenDAO
         return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
     }
 
+    public function getTokenByTokenAndExpirationDate(Token $Token): array|bool
+    {
+        $SQL = 'SELECT * FROM tokens WHERE token = :token AND expiration_date > NOW() LIMIT 1;';
+
+        $stmt = $this->database->prepare($SQL);
+        $stmt->bindValue(':token', $Token->getToken(), PDO::PARAM_STR);
+        $stmt->execute();
+
+        return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
+    }
+
     public function register(Token $Token): int|bool
     {
         $SQL = 'INSERT INTO tokens (user_id, token, expiration_date) VALUES (:user_id, :token, :expiration_date);';

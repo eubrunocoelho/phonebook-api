@@ -1,5 +1,6 @@
 <?php
 
+use Middlewares\Authentication;
 use Middlewares\Cors;
 
 $router->post('/register', 'Controllers\AuthController::register')
@@ -14,4 +15,9 @@ $router->post('/login', 'Controllers\AuthController::login')
         return true;
     });
 
-$router->get('/contacts', 'Controllers\ContactController::index');
+$router->get('/contacts', 'Controllers\ContactController::index')
+    ->before(function () {
+        Authentication::authorization();
+
+        return false;
+    });
