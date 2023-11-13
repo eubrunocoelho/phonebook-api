@@ -20,7 +20,7 @@ class AuthController
     {
         $this->jsonResource = $dependency['Resources\JsonResource'];
         $this->jsonRequestService = $dependency['Services\JsonRequestService'];
-        $this->validate = $dependency['Validation\Validate'];
+        $this->validate = $dependency['Validate\Validate'];
         $this->connection = ConnectionFactory::getConnection();
     }
 
@@ -52,7 +52,7 @@ class AuthController
             ]
         ];
 
-        $this->validate->validation($data, $rules);
+        $this->validate->validate($data, $rules);
         $_errors = $this->validate->getErrors() ?? [];
 
         foreach ($_errors as $key => $value) $errors[] = $value;
@@ -65,8 +65,7 @@ class AuthController
             $User->setPassword($data['password']);
             $result = $UserDAO->register($User);
 
-            if ($result)
-                return $this->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!');
+            if ($result) return $this->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!');
             else
                 return $this->jsonResource->toJson(500, 'Houve um erro interno.');
         } else
@@ -91,7 +90,7 @@ class AuthController
             ]
         ];
 
-        $this->validate->validation($data, $rules);
+        $this->validate->validate($data, $rules);
         $_errors = $this->validate->getErrors() ?? [];
 
         foreach ($_errors as $key => $value) $errors[] = $value;
