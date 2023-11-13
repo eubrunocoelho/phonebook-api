@@ -14,6 +14,17 @@ class UserDAO
         $this->database = $database;
     }
 
+    public function getUserById(User $User): array|bool
+    {
+        $SQL = 'SELECT * FROM users WHERE id = :id LIMIT 1;';
+
+        $stmt = $this->database->prepare($SQL);
+        $stmt->bindValue(':id', $User->getId());
+        $stmt->execute();
+
+        return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
+    }
+
     public function getUserByUsernameOrEmail(User $User): array|bool
     {
         $SQL = 'SELECT * FROM users WHERE email = :user OR username = :user LIMIT 1;';
