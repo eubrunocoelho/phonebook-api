@@ -65,9 +65,12 @@ class AuthController
             $User->setPassword($data['password']);
             $result = $UserDAO->register($User);
 
-            if ($result) return $this->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!');
-            else return $this->jsonResource->toJson(500, 'Houve um erro interno.');
-        } else return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ['errors' => $errors]);
+            if ($result)
+                return $this->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!');
+            else
+                return $this->jsonResource->toJson(500, 'Houve um erro interno.');
+        } else
+            return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ['errors' => $errors]);
     }
 
     public function login() //: JsonResource
@@ -139,8 +142,11 @@ class AuthController
 
                         return $this->jsonResource->toJson(200, 'Usuário autenticado com sucesso!', ['data' => $result]);
                     }
-                } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
-            } else return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
-        } else return $this->jsonResource->toJson(422, 'Erro ao tentar autenticar o usuário.', ['errors' => $errors]);
+                } else
+                    return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
+            } else
+                return $this->jsonResource->toJson(422, 'Usuário ou senha inválidos.');
+        } else
+            return $this->jsonResource->toJson(422, 'Erro ao tentar autenticar o usuário.', ['errors' => $errors]);
     }
 }
