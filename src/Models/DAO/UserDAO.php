@@ -46,6 +46,6 @@ class UserDAO
         $stmt->bindValue(':password', $User->getPassword(), PDO::PARAM_STR);
         $stmt->execute();
 
-        return ($stmt->rowCount() > 0) ? true : false;
+        return ($stmt->rowCount() > 0) ? $this->database->lastInsertId() : false;
     }
 }
