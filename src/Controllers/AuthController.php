@@ -73,7 +73,7 @@ class AuthController
             return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ['errors' => $errors]);
     }
 
-    public function login() //: JsonResource
+    public function login(): JsonResource
     {
         $UserDAO = new UserDAO($this->connection);
         $User = new User();
