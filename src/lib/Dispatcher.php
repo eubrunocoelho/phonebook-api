@@ -4,7 +4,7 @@ namespace lib;
 
 use Closure;
 use Exception;
-use Exceptions\Exceptions;
+use Exceptions\CustomException;
 use lib\Router;
 
 class Dispatcher
@@ -23,7 +23,7 @@ class Dispatcher
         try {
             $result = $this->router->handler();
         } catch (Exception $e) {
-            throw new Exceptions($e->getMessage(), $e->getCode(), $e);
+            throw new CustomException($e->getMessage(), $e->getCode(), $e);
         }
 
         $data = $result->getData();

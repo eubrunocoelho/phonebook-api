@@ -3,7 +3,7 @@
 namespace lib;
 
 use Closure;
-use Exceptions\Exceptions;
+use Exceptions\CustomException;
 
 class Router
 {
@@ -59,7 +59,7 @@ class Router
     public function handler(): Object
     {
         if ($this->checkDuplicates($this->routes['routes']))
-            throw new Exceptions('Houve um erro interno.', 500);
+            throw new CustomException('Houve um erro interno.', 500);
 
         if (isset($this->routes[$this->method][$this->path]))
             return $this->routes[$this->method][$this->path];
@@ -70,7 +70,7 @@ class Router
             if ($result >= 1) return $action;
         }
 
-        throw new Exceptions('Página não encontrada.', 404);
+        throw new CustomException('Página não encontrada.', 404);
     }
 
     private function checkDuplicates(array $routes): bool
