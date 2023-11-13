@@ -1,12 +1,12 @@
 <?php
 
-namespace Validation;
+namespace Validate;
 
 class Validate extends Validators
 {
     private $errors;
 
-    public function validation(array $data, array $rules): void
+    public function validate(array $data, array $rules): void
     {
         foreach ($rules as $item => $rules) {
             foreach ($rules as $rule => $ruleValue) {

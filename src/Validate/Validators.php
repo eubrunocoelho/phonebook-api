@@ -1,6 +1,6 @@
 <?php
 
-namespace Validation;
+namespace Validate;
 
 use lib\ConnectionFactory;
 use PDO;

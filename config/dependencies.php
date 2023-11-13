@@ -2,7 +2,7 @@
 
 use Resources\JsonResource;
 use Services\JsonRequestService;
-use Validation\Validate;
+use Validate\Validate;
 
 return [
     JsonResource::class => new JsonResource(),
