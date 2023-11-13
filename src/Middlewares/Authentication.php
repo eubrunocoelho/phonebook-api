@@ -7,13 +7,20 @@ use Models\DAO\TokenDAO;
 use Models\DAO\UserDAO;
 use Models\Token;
 use Models\User;
+use Resources\JsonResource;
 use Sessions\Session;
 
 class Authentication
 {
+    private static $connection;
+    private static $jsonResource;
+
     public static function authorization()
     {
+        self::$connection = ConnectionFactory::getConnection();
+
         $headers = getallheaders();
+        $jsonResource = new JsonResource();
 
         if (array_key_exists('Authorization', $headers) && preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
             $token = $matches[1];
@@ -21,17 +28,18 @@ class Authentication
             if (!!$result = self::validateToken($token)) {
                 $userId = $result['user_id'];
 
-                if (self::authentication($userId)) {
-                    dd('Autenticado');
-                } else return false;
-            } else return false;
-        } else return false;
+                if (self::authentication($userId)) return true;
+                else
+                    return $jsonResource->toJson(404, 'Usuário inexistente.');
+            } else
+                return $jsonResource->toJson(401, 'O token de autorização está inválido.');
+        } else
+            return $jsonResource->toJson(403, 'É necessário informar o token de autorização.');
     }
 
     private static function validateToken($token)
     {
-        $connection = ConnectionFactory::getConnection();
-        $TokenDAO = new TokenDAO($connection);
+        $TokenDAO = new TokenDAO(self::$connection);
         $Token = new Token();
 
         $Token->setToken($token);
@@ -42,8 +50,7 @@ class Authentication
 
     private static function authentication($userId)
     {
-        $connection = ConnectionFactory::getConnection();
-        $UserDAO = new UserDAO($connection);
+        $UserDAO = new UserDAO(self::$connection);
         $User = new User();
 
         $User->setId($userId);
