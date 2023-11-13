@@ -4,7 +4,10 @@ namespace Middlewares;
 
 use lib\ConnectionFactory;
 use Models\DAO\TokenDAO;
+use Models\DAO\UserDAO;
 use Models\Token;
+use Models\User;
+use Sessions\Session;
 
 class Authentication
 {
@@ -18,9 +21,11 @@ class Authentication
             if (!!$result = self::validateToken($token)) {
                 $userId = $result['user_id'];
 
-                self::authentication($userId);
-            }
-        }
+                if (self::authentication($userId)) {
+                    dd('Autenticado');
+                } else return false;
+            } else return false;
+        } else return false;
     }
 
     private static function validateToken($token)
@@ -37,6 +42,15 @@ class Authentication
 
     private static function authentication($userId)
     {
-        dd($userId, true);
+        $connection = ConnectionFactory::getConnection();
+        $UserDAO = new UserDAO($connection);
+        $User = new User();
+
+        $User->setId($userId);
+        if (!!$result = $UserDAO->getUserById($User)) {
+            Session::put('user', $result);
+
+            return true;
+        } else return false;
     }
 }
