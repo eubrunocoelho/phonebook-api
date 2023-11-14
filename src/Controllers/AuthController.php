@@ -99,7 +99,7 @@ class AuthController
             $User->setUser($data['username']);
             $result = $UserDAO->getUserByUsernameOrEmail($User);
 
-            if ($result && (password_verify($data['password'], $result['password']))) {
+            if ($result && password_verify($data['password'], $result['password'])) {
                 unset($result['password']);
 
                 $Token->setUserId($result['id']);
@@ -138,7 +138,7 @@ class AuthController
                 }
 
                 $result['token'] = $resultToken['token'];
-                
+
                 return $this->jsonResource->toJson(200, 'Usuário autenticado com sucesso!', ['data' => $result]);
             } else
                 return $this->jsonResource->toJson(401, 'Usuário ou senha inválidos.');
