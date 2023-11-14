@@ -4,22 +4,22 @@ use Middlewares\Authentication;
 use Middlewares\Cors;
 
 $router->post('/register', 'Controllers\AuthController::register')
-    ->before(function () {
-        Cors::handleCorsHeaders($_SERVER['REQUEST_METHOD']);
+    ->before(function () use ($method) {
+        Cors::handleCorsHeaders($method);
 
         return true;
     });
 
 $router->post('/login', 'Controllers\AuthController::login')
-    ->before(function () {
-        Cors::handleCorsHeaders($_SERVER['REQUEST_METHOD']);
+    ->before(function () use ($method) {
+        Cors::handleCorsHeaders($method);
 
         return true;
     });
 
 $router->get('/contacts', 'Controllers\ContactController::index')
-    ->before(function () {
-        Cors::handleCorsHeaders($_SERVER['REQUEST_METHOD']);
+    ->before(function () use ($method) {
+        Cors::handleCorsHeaders($method);
 
         return true;
     })
