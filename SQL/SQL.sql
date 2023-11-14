@@ -18,3 +18,21 @@ CREATE TABLE tokens (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE contacts (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    email UNIQUE VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE phones (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    contact_id BIGINT NOT NULL,
+    phonenumber VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (contact_id) REFERENCES contacts (id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
