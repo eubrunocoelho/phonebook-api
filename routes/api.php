@@ -28,3 +28,15 @@ $router->get('/contacts', 'Controllers\ContactController::index')
 
         return (!!$isAuth) ? true : false;
     });
+
+$router->post('/contacts', 'Controllers\ContactController::store')
+    ->before(function () use ($method) {
+        Cors::handleCorsHeaders($method);
+
+        return true;
+    })
+    ->before(function () {
+        $isAuth = Authentication::authorization();
+
+        return (!!$isAuth) ? true : false;
+    });
