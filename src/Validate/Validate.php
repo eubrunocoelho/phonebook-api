@@ -10,10 +10,10 @@ class Validate extends Validators
     {
         foreach ($rules as $item => $rules) {
             foreach ($rules as $rule => $ruleValue) {
-                $value = $data[$item] ?? null;
+                $value = $data[$item] ?? '';
 
-                if ($rule == 'required' || is_null($value)) {
-                    if (is_null($value) || parent::isEmpty($value)) $this->addError('O campo \'' . $item . '\' é obrigatório.');
+                if ($rule == 'required' || parent::isEmpty($value)) {
+                    if ($rules['required'] == true && parent::isEmpty($value)) $this->addError('O campo \'' . $item . '\' é obrigatório.');
                 } elseif (!parent::isEmpty($value)) switch ($rule) {
                     case 'unique':
                         if (!parent::unique($value, $ruleValue))
