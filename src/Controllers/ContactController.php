@@ -3,6 +3,9 @@
 namespace Controllers;
 
 use lib\ConnectionFactory;
+use Models\DAO\ContactDAO;
+use Models\Contact;
+use Sessions\Session;
 
 class ContactController
 {
@@ -10,6 +13,7 @@ class ContactController
     private $jsonRequestService;
     private $validate;
     private $connection;
+    private $user;
 
     public function __construct(array $dependency)
     {
@@ -17,6 +21,7 @@ class ContactController
         $this->jsonRequestService = $dependency['Services\JsonRequestService'];
         $this->validate = $dependency['Validate\Validate'];
         $this->connection = ConnectionFactory::getConnection();
+        $this->user = Session::get('user');
     }
 
     public function index(): void
@@ -26,6 +31,9 @@ class ContactController
 
     public function store()
     {
+        $ContactDAO = new ContactDAO($this->connection);
+        $Contact = new Contact();
+
         $data = $this->jsonRequestService->getData();
 
         $rules = [
@@ -49,7 +57,20 @@ class ContactController
         foreach ($_errors as $key => $value) $errors[] = $value;
 
         if ($this->validate->passed()) {
+            $data['user_id'] = $this->user['id'];
+            $data['email'] = $data['email'] ?? '';
+
+            $Contact->setUserId($data['user_id']);
+            $Contact->setName($data['name']);
+            $Contact->setEmail($data['email']);
+            $result = $ContactDAO->register($Contact);
+
             //
+            if (!!$result) {
+                $Contact->setId($result);
+                
+                dd($ContactDAO->getContactById($Contact));
+            } // finished system for contact registration
         } else
             return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o contato.', ['errors' => $errors]);
     }
