@@ -37,4 +37,16 @@ class ContactDAO
 
         return ($stmt->rowCount() > 0) ? $this->database->lastInsertId() : false;
     }
+
+    public function update(Contact $Contact)
+    {
+        $SQL = 'UPDATE contacts SET name = :name, email = :email WHERE id = :id;';
+
+        $stmt = $this->database->prepare($SQL);
+        $stmt->bindValue(':name', $Contact->getName(), PDO::PARAM_STR);
+        $stmt->bindValue(':email', $Contact->getEmail(), PDO::PARAM_STR);
+        $stmt->bindValue(':id', $Contact->getId(), PDO::PARAM_INT);
+
+        return ($stmt->execute()) ? true : false;
+    }
 }
