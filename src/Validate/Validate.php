@@ -19,6 +19,11 @@ class Validate extends Validators
                         if (!parent::unique($value, $ruleValue))
                             $this->addError('Este \'' . $item . '\' já está cadastrado.');
                         break;
+
+                    case 'unique-for-update':
+                        if (!parent::uniqueForUpdate($value, $ruleValue))
+                            $this->addError('Este \'' . $item . '\' já está cadastrado.');
+                        break;
                     case 'min':
                         if (!parent::min($value, $ruleValue))
                             $this->addError('O campo \'' . $item . '\' deve conter pelo menos ' . $ruleValue . ' caracteres.');
