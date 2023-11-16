@@ -5,6 +5,7 @@ namespace Controllers;
 use lib\ConnectionFactory;
 use Models\DAO\ContactDAO;
 use Models\Contact;
+use Resources\JsonResource;
 use Sessions\Session;
 
 class ContactController
@@ -29,7 +30,7 @@ class ContactController
         echo 'Contacts';
     }
 
-    public function store()
+    public function store(): JsonResource
     {
         $ContactDAO = new ContactDAO($this->connection);
         $Contact = new Contact();
@@ -58,19 +59,23 @@ class ContactController
 
         if ($this->validate->passed()) {
             $data['user_id'] = $this->user['id'];
-            $data['email'] = $data['email'] ?? '';
+            $data['email'] = $data['email'] ?? null;
 
             $Contact->setUserId($data['user_id']);
             $Contact->setName($data['name']);
             $Contact->setEmail($data['email']);
-            $result = $ContactDAO->register($Contact);
+            $resultId = $ContactDAO->register($Contact);
 
-            //
-            if (!!$result) {
-                $Contact->setId($result);
-                
-                dd($ContactDAO->getContactById($Contact));
-            } // finished system for contact registration
+            if (!!$resultId) {
+                unset($data);
+
+                $Contact->setId($resultId);
+                $data = $ContactDAO->getContactById($Contact);
+                $data['email'] = (!is_null($data['email'])) ? $data['email'] : 'Não informado';
+
+                return $this->jsonResource->toJson(201, 'Contato cadastrado com sucesso!', ['data' => $data]);
+            } else
+                return $this->jsonResource->toJson(500, 'Houve um erro interno.');
         } else
             return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o contato.', ['errors' => $errors]);
     }
