@@ -63,16 +63,23 @@ class AuthController
             $User->setUsername($data['username']);
             $User->setEmail($data['email']);
             $User->setPassword($data['password']);
-            $result = $UserDAO->register($User);
+            $resultId = $UserDAO->register($User);
 
-            if ($result) return $this->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!');
-            else
+            if (!!$resultId) {
+                unset($data);
+
+                $User->setId($resultId);
+                $data = $UserDAO->getUserById($User);
+                unset($data['password']);
+
+                return $this->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!', ['data' => $data]);
+            } else
                 return $this->jsonResource->toJson(500, 'Houve um erro interno.');
         } else
             return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o usuário.', ['errors' => $errors]);
     }
 
-    public function login() //: JsonResource
+    public function login(): JsonResource
     {
         $UserDAO = new UserDAO($this->connection);
         $User = new User();
