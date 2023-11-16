@@ -84,21 +84,47 @@ class ContactController
     public function update($params)
     {
         $contactId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
+        if (!$contactId) return $this->jsonResource->toJson(404, 'Página não encontrada.');
 
         $ContactDAO = new ContactDAO($this->connection);
         $Contact = new Contact();
 
         $Contact->setId($contactId);
         $result = $ContactDAO->getContactById($Contact);
-        
+
         if (!!$result) {
             $userId = $this->user['id'];
             $ownerId = $result['user_id'];
 
             if (AuthorizationService::checkOwner($userId, $ownerId)) {
-                echo 'Autorizado.';
+                $data = $this->jsonRequestService->getData();
+
+                $rules = [
+                    'name' => [
+                        'required' => true,
+                        'min' => 3,
+                        'max' => 255,
+                        'regex' => '/^[a-zA-ZÀ-ÿ\s]+$/u',
+                    ],
+                    'email' => [
+                        'required' => false,
+                        'email' => true,
+                        'max' => 128,
+                        'unique-for-update' => 'email|contacts|user_id|' . $userId . '|id|' . $result['id']
+                    ]
+                ];
+
+                $this->validate->validate($data, $rules);
+                $_errors = $this->validate->getErrors() ?? [];
+
+                foreach ($_errors as $key => $value) $errors[] = $value;
+
+                if ($this->validate->passed()) {
+                } else
+                    return $this->jsonResource->toJson(422, 'Error ao tentar atualizar o cadastro.', ['errors' => $errors]);
             } else
                 return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
-        }
+        } else
+            return $this->jsonResource->toJson(404, 'Contato inexistente.');
     }
 }
