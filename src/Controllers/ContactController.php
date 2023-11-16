@@ -6,6 +6,7 @@ use lib\ConnectionFactory;
 use Models\DAO\ContactDAO;
 use Models\Contact;
 use Resources\JsonResource;
+use Services\AuthorizationService;
 use Sessions\Session;
 
 class ContactController
@@ -78,5 +79,26 @@ class ContactController
                 return $this->jsonResource->toJson(500, 'Houve um erro interno.');
         } else
             return $this->jsonResource->toJson(422, 'Erro ao tentar cadastrar o contato.', ['errors' => $errors]);
+    }
+
+    public function update($params)
+    {
+        $contactId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
+
+        $ContactDAO = new ContactDAO($this->connection);
+        $Contact = new Contact();
+
+        $Contact->setId($contactId);
+        $result = $ContactDAO->getContactById($Contact);
+        
+        if (!!$result) {
+            $userId = $this->user['id'];
+            $ownerId = $result['user_id'];
+
+            if (AuthorizationService::checkOwner($userId, $ownerId)) {
+                echo 'Autorizado.';
+            } else
+                return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
+        }
     }
 }
