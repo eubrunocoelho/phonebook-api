@@ -40,3 +40,15 @@ $router->post('/contacts', 'Controllers\ContactController::store')
 
         return (!!$isAuth) ? true : false;
     });
+
+$router->put('/contacts/{id}', 'Controllers\ContactController::update')
+    ->before(function () use ($method) {
+        Cors::handleCorsHeaders($method);
+
+        return true;
+    })
+    ->before(function () {
+        $isAuth = Authentication::authorization();
+
+        return (!!$isAuth) ? true : false;
+    });
