@@ -14,7 +14,7 @@ class ContactDAO
         $this->database = $database;
     }
 
-    public function getContactById(Contact $Contact)
+    public function getContactById(Contact $Contact): array|bool
     {
         $SQL = 'SELECT * FROM contacts WHERE id = :id LIMIT 1;';
 
@@ -25,7 +25,7 @@ class ContactDAO
         return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
     }
 
-    public function register(Contact $Contact)
+    public function register(Contact $Contact): bool|int
     {
         $SQL = 'INSERT INTO contacts (user_id, name, email) VALUES (:user_id, :name, :email);';
 

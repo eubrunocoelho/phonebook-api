@@ -36,7 +36,7 @@ class UserDAO
         return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
     }
 
-    public function register(User $User): bool
+    public function register(User $User): bool|int
     {
         $SQL = 'INSERT INTO users (username, email, password) VALUES (:username, :email, :password);';
 
