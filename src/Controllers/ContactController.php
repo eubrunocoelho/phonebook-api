@@ -49,7 +49,7 @@ class ContactController
                 'required' => false,
                 'email' => true,
                 'max' => 128,
-                'unique' => 'email|contacts'
+                'contact-unique' => 'email|contacts|user_id|' . $this->user['id']
             ]
         ];
 
@@ -110,7 +110,7 @@ class ContactController
                         'required' => false,
                         'email' => true,
                         'max' => 128,
-                        'unique-for-update' => 'email|contacts|user_id|' . $userId . '|id|' . $result['id']
+                        'contact-unique-for-update' => 'email|contacts|user_id|' . $userId . '|id|' . $result['id']
                     ]
                 ];
 
@@ -118,8 +118,20 @@ class ContactController
                 $_errors = $this->validate->getErrors() ?? [];
 
                 foreach ($_errors as $key => $value) $errors[] = $value;
-
+                
                 if ($this->validate->passed()) {
+                    $data['email'] = $data['email'] ?? null;
+
+                    $Contact->setId($result['id']);
+                    $Contact->setName($data['name']);
+                    $Contact->setEmail($data['email']);
+
+                    $result = $ContactDAO->update($Contact);
+
+                    if ($result) {
+                        return $this->jsonResource->toJson(204); // 204 (_NO_CONTENT?)
+                    } else
+                        return $this->jsonResource->toJson(500, 'Houve um erro interno.');
                 } else
                     return $this->jsonResource->toJson(422, 'Error ao tentar atualizar o cadastro.', ['errors' => $errors]);
             } else
