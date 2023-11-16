@@ -45,7 +45,20 @@ abstract class Validators
         return (!$stmt->rowCount() > 0) ? true : false;
     }
 
-    protected function uniqueForUpdate(int|string $value, bool|int|string $ruleValue): bool
+    protected function contactUnique(int|string $value, bool|int|string $ruleValue): bool
+    {
+        $ex = explode('|', $ruleValue);
+        $database = ConnectionFactory::getConnection();
+
+        $SQL = 'SELECT * FROM ' . $ex[1] . ' WHERE ' . $ex[2] . ' = ' . $ex[3] . ' AND ' . $ex[0] . ' = :value';
+        $stmt = $database->prepare($SQL);
+        $stmt->bindValue(':value', $value, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return (!$stmt->rowCount() > 0) ? true : false;
+    }
+
+    protected function contactUniqueForUpdate(int|string $value, bool|int|string $ruleValue): bool
     {
         $ex = explode('|', $ruleValue);
         $database = ConnectionFactory::getConnection();
