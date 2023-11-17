@@ -2,9 +2,12 @@
 
 namespace Handlers\Contact;
 
+use Models\{
+    Contact,
+    DAO\ContactDAO
+};
+
 use Handlers\Handler;
-use Models\Contact;
-use Models\DAO\ContactDAO;
 
 class StoreHandler extends Handler
 {
@@ -26,8 +29,7 @@ class StoreHandler extends Handler
         if ($resultId !== false) {
             $Contact->setId($resultId);
             $data = $ContactDAO->getContactById($Contact);
-            
-            $data['email'] = (empty($data['email'])) ? 'Não informado' : $data['email'];
+            $data['email'] = (!isset($data['email']) || empty($data['email'])) ? 'Não informado' : $data['email'];
 
             return $controller->jsonResource->toJson(201, 'Contato cadastrado com sucesso!', ['data' => $data]);
         } else return $controller->jsonResource->toJson(500, 'Houve um erro interno.');
