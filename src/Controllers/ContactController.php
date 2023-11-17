@@ -19,19 +19,18 @@ use Sessions\Session;
 
 class ContactController
 {
+    public $connection;
     public $jsonResource;
     public $jsonRequestService;
     public $validate;
-    public $connection;
     public $user;
-    public $validationHandler;
 
     public function __construct(array $dependency)
     {
+        $this->connection = $dependency['lib\ConnectionFactory'];
         $this->jsonResource = $dependency['Resources\JsonResource'];
         $this->jsonRequestService = $dependency['Services\JsonRequestService'];
         $this->validate = $dependency['Validate\Validate'];
-        $this->connection = $dependency['lib\ConnectionFactory'];
         $this->user = Session::get('user');
     }
 
