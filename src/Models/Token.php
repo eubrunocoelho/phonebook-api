@@ -9,7 +9,7 @@ class Token
     private $token;
     private $expirationDate;
 
-    public function setId($id): void
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -19,7 +19,7 @@ class Token
         return $this->id;
     }
 
-    public function setUserId($userId): void
+    public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }
@@ -29,7 +29,7 @@ class Token
         return $this->userId;
     }
 
-    public function setToken($token): void
+    public function setToken(string $token): void
     {
         $this->token = $token;
     }
@@ -39,7 +39,7 @@ class Token
         return $this->token;
     }
 
-    public function setExpirationDate($expirationDate): void
+    public function setExpirationDate(string $expirationDate): void
     {
         $this->expirationDate = $expirationDate;
     }

@@ -17,21 +17,21 @@ class StoreHandler extends Handler
         $UserDAO = new UserDAO($controller->connection);
         $User = new User();
 
-        if (!$data['result_token']) {
-            
+        $Token->setUserId($data['user']['id']);
+        $tokenExists = $TokenDAO->getTokenByUserId($Token);
+        
+        if (!$tokenExists) {
             $write = [
                 'user_id' => $data['user']['id'],
                 'token' => $data['token']['token'],
                 'expiration_date' => $data['token']['expiration_date']
             ];
 
-            $Token->setUserId($data['user']['id']);
+            $Token->setUserId($write['user_id']);
             $Token->setToken($write['token']);
             $Token->setExpirationDate($write['expiration_date']);
 
-            $resultId = $TokenDAO->register($Token);
-            
-            if ($resultId !== false) {
+            if ($resultId = $TokenDAO->register($Token)) {
                 $User->setId($data['user']['id']);
                 $Token->setId($resultId);
 

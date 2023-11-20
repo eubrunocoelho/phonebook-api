@@ -73,12 +73,12 @@ class TokenDAO
 
     public function update(Token $Token): bool
     {
-        $SQL = 'UPDATE tokens SET token = :token, expiration_date = :expiration_date WHERE user_id = :user_id;';
+        $SQL = 'UPDATE tokens SET token = :token, expiration_date = :expiration_date WHERE id = :id;';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':token', $Token->getToken(), PDO::PARAM_STR);
         $stmt->bindValue(':expiration_date', $Token->getExpirationDate(), PDO::PARAM_STR);
-        $stmt->bindValue(':user_id', $Token->getUserId(), PDO::PARAM_INT);
+        $stmt->bindValue(':id', $Token->getId(), PDO::PARAM_INT);
 
         return ($stmt->execute()) ? true : false;
     }
