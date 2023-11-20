@@ -2,11 +2,14 @@
 
 namespace Handlers\Token;
 
+use Models\{
+    DAO\TokenDAO,
+    DAO\UserDAO,
+    Token,
+    User
+};
+
 use Handlers\Handler;
-use Models\DAO\TokenDAO;
-use Models\DAO\UserDAO;
-use Models\Token;
-use Models\User;
 
 class StoreHandler extends Handler
 {

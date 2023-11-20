@@ -2,9 +2,12 @@
 
 namespace Handlers\User;
 
+use Models\{
+    DAO\UserDAO,
+    User
+};
+
 use Handlers\Handler;
-use Models\DAO\UserDAO;
-use Models\User;
 
 class StoreHandler extends Handler
 {

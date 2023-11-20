@@ -2,13 +2,16 @@
 
 namespace Handlers\Auth;
 
-use Handlers\Handler;
-use Models\DAO\TokenDAO;
-use Models\DAO\UserDAO;
-use Models\Token;
-use Models\User;
+use Models\{
+    DAO\TokenDAO,
+    DAO\UserDAO,
+    Token,
+    User
+};
 
-class LoginHandler extends Handler
+use Handlers\Handler;
+
+class AuthenticateHandler extends Handler
 {
     public function handle($data, $controller)
     {
@@ -37,14 +40,14 @@ class LoginHandler extends Handler
                 'token' => bin2hex(random_bytes(16)),
                 'expiration_date' => date('Y-m-d H:i:s', strtotime('+3 days'))
             ];
-            
+
             $data['result_token'] = $resultToken;
 
             foreach ($this->successors as $successor) {
                 $data = $successor->handle($data, $controller);
             }
-        } else return $controller->jsonResource->toJson(401, 'Usuário ou senha inválidos.');
 
-        return $data;
+            return $data;
+        } else return $controller->jsonResource->toJson(401, 'Usuário ou senha inválidos.');
     }
 }

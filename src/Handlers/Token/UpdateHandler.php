@@ -2,11 +2,14 @@
 
 namespace Handlers\Token;
 
+use Models\{
+    DAO\TokenDAO,
+    DAO\UserDAO,
+    Token,
+    User
+};
+
 use Handlers\Handler;
-use Models\DAO\TokenDAO;
-use Models\DAO\UserDAO;
-use Models\Token;
-use Models\User;
 
 class UpdateHandler extends Handler
 {
@@ -45,6 +48,12 @@ class UpdateHandler extends Handler
 
                 return $controller->jsonResource->toJson(200, 'Usuário autenticado com sucesso!', ['data' => $data]);
             }
+        } else {
+            foreach ($this->successors as $successor) {
+                $data = $successor->handle($data, $controller);
+            }
+
+            return $data;
         }
     }
 }
