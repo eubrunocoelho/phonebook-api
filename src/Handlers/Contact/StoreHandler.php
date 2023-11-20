@@ -17,16 +17,19 @@ class StoreHandler extends Handler
         $Contact = new Contact();
 
         $write = [
+            'user_id' => $controller->user['id'],
             'name' => $data['request']['name'],
             'email' => (empty($data['request']['email'])) ? null : $data['request']['email']
         ];
 
-        $Contact->setUserId($controller->user['id']);
+        $Contact->setUserId($write['user_id']);
         $Contact->setName($write['name']);
         $Contact->setEmail($write['email']);
         $resultId = $ContactDAO->register($Contact);
 
         if ($resultId !== false) {
+            unset($data);
+
             $Contact->setId($resultId);
             $data = $ContactDAO->getContactById($Contact);
             $data['email'] = (!isset($data['email']) || empty($data['email'])) ? 'Não informado' : $data['email'];

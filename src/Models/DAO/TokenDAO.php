@@ -14,6 +14,17 @@ class TokenDAO
         $this->database = $database;
     }
 
+    public function getTokenById(Token $Token)
+    {
+        $SQL = 'SELECT * FROM tokens WHERE id = :id LIMIT 1;';
+
+        $stmt = $this->database->prepare($SQL);
+        $stmt->bindValue(':id', $Token->getId(), PDO::PARAM_STR);
+        $stmt->execute();
+
+        return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
+    }
+
     public function getTokenByUserId(Token $Token): array|bool
     {
         $SQL = 'SELECT * FROM tokens WHERE user_id = :user_id LIMIT 1;';

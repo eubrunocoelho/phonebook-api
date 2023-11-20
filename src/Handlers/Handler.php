@@ -4,11 +4,11 @@ namespace Handlers;
 
 abstract class Handler
 {
-    public $successor;
+    protected $successors = [];
     
     public function setSuccessor($successor)
     {
-        $this->successor = $successor;
+        $this->successors[] = $successor;
     }
 
     abstract public function handle($data, $controller);
