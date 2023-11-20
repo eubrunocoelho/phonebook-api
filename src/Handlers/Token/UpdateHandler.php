@@ -49,9 +49,7 @@ class UpdateHandler extends Handler
                 return $controller->jsonResource->toJson(200, 'Usuário autenticado com sucesso!', ['data' => $data]);
             }
         } else {
-            foreach ($this->successors as $successor) {
-                $data = $successor->handle($data, $controller);
-            }
+            foreach ($this->successors as $successor) $data = $successor->handle($data, $controller);
 
             return $data;
         }

@@ -43,9 +43,7 @@ class AuthenticateHandler extends Handler
 
             $data['result_token'] = $resultToken;
 
-            foreach ($this->successors as $successor) {
-                $data = $successor->handle($data, $controller);
-            }
+            foreach ($this->successors as $successor) $data = $successor->handle($data, $controller);
 
             return $data;
         } else return $controller->jsonResource->toJson(401, 'Usuário ou senha inválidos.');

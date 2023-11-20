@@ -32,9 +32,10 @@ class StoreHandler extends Handler
 
             $User->setId($resultId);
             $data = $UserDAO->getUserById($User);
+            
             unset($data['password']);
 
             return $controller->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!', ['data' => $data]);
-        } else return $controller->jsonResource->toJson(500, 'Houve um erro interno.');
+        }
     }
 }

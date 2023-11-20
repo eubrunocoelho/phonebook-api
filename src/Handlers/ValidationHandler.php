@@ -14,11 +14,7 @@ class ValidationHandler extends Handler
         foreach ($_errors as $key => $value) $errors[] = $value;
 
         if ($controller->validate->passed()) {
-            $newData = unserialize(serialize($data));
-
-            foreach ($this->successors as $successor) {
-                $data = $successor->handle($data, $controller);
-            }
+            foreach ($this->successors as $successor) $data = $successor->handle($data, $controller);
 
             return $data;
         } else return $controller->jsonResource->toJson(422, 'Erro ao fazer requisição.', ['errors' => $errors]);
