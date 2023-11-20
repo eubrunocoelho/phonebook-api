@@ -11,8 +11,6 @@ use Handlers\{
     ValidationHandler
 };
 
-use lib\ConnectionFactory;
-
 class AuthController
 {
     public $jsonResource;
@@ -28,7 +26,7 @@ class AuthController
         $this->validate = $dependency['Validate\Validate'];
     }
 
-    public function register()
+    public function register(): void
     {
         $data['rules'] = [
             'username' => [
@@ -58,7 +56,7 @@ class AuthController
         $ValidationHandler->handle($data, $this);
     }
 
-    public function login()
+    public function login(): void
     {
         $data['rules'] = [
             'username' => [

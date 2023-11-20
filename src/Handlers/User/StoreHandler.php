@@ -11,7 +11,7 @@ use Handlers\Handler;
 
 class StoreHandler extends Handler
 {
-    public function handle($data, $controller)
+    public function handle(array $data, Object $controller): array|Object
     {
         $UserDAO = new UserDAO($controller->connection);
         $User = new User();

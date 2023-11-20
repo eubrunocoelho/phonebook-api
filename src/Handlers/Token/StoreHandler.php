@@ -13,7 +13,7 @@ use Handlers\Handler;
 
 class StoreHandler extends Handler
 {
-    public function handle($data, $controller)
+    public function handle(array $data, Object $controller): array|Object
     {
         $TokenDAO = new TokenDAO($controller->connection);
         $Token = new Token();
@@ -22,7 +22,7 @@ class StoreHandler extends Handler
 
         $Token->setUserId($data['user']['id']);
         $tokenExists = $TokenDAO->getTokenByUserId($Token);
-        
+
         if (!$tokenExists) {
             $write = [
                 'user_id' => $data['user']['id'],

@@ -4,7 +4,7 @@ namespace Handlers;
 
 class ValidationHandler extends Handler
 {
-    public function handle($data, $controller)
+    public function handle(array $data, Object $controller): array|Object
     {
         $data['request'] = $controller->jsonRequestService->getData();
 

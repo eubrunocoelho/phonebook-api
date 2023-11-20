@@ -6,10 +6,10 @@ abstract class Handler
 {
     protected $successors = [];
     
-    public function setSuccessor($successor)
+    public function setSuccessor(Object $successor): void
     {
         $this->successors[] = $successor;
     }
 
-    abstract public function handle($data, $controller);
+    abstract public function handle(array $data, Object $controller): array|Object;
 }

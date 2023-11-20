@@ -13,17 +13,17 @@ use Handlers\Handler;
 
 class UpdateHandler extends Handler
 {
-    public function handle($data, $controller)
+    public function handle(array $data, Object $controller): array|Object
     {
         $TokenDAO = new TokenDAO($controller->connection);
         $Token = new Token();
         $UserDAO = new UserDAO($controller->connection);
         $User = new User();
 
-        if (!$data['result_token']) {     
+        if (!$data['result_token']) {
             $Token->setUserId($data['user']['id']);
             $resultToken = $TokenDAO->getTokenByUserId($Token);
-            
+
             $write = [
                 'id' => $resultToken['id'],
                 'token' => $data['token']['token'],

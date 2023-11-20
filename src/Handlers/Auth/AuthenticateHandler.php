@@ -13,7 +13,7 @@ use Handlers\Handler;
 
 class AuthenticateHandler extends Handler
 {
-    public function handle($data, $controller)
+    public function handle(array $data, Object $controller): array|Object
     {
         $TokenDAO = new TokenDAO($controller->connection);
         $Token = new Token();
