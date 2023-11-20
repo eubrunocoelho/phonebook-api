@@ -40,7 +40,7 @@ class User
         return $this->username;
     }
 
-    public function setEmail($email): void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }

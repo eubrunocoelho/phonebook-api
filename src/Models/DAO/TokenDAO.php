@@ -14,7 +14,7 @@ class TokenDAO
         $this->database = $database;
     }
 
-    public function getTokenById(Token $Token)
+    public function getTokenById(Token $Token): array|bool
     {
         $SQL = 'SELECT * FROM tokens WHERE id = :id LIMIT 1;';
 
