@@ -43,7 +43,8 @@ class PhoneController
         $data['rules'] = [
             'phone_number' => [
                 'required' => true,
-                'regex' => '/^\([0-9]{2}\) [0-9]?[0-9]{4}-[0-9]{4}$/'
+                'regex' => '/^\([0-9]{2}\) [0-9]?[0-9]{4}-[0-9]{4}$/',
+                'custom-unique' => 'phone_number|phones|contact_id|' . $contact['id']
             ],
             'description' => [
                 'required' => false,

@@ -45,7 +45,7 @@ abstract class Validators
         return (!$stmt->rowCount() > 0) ? true : false;
     }
 
-    protected function contactUnique(int|string $value, mixed $ruleValue): bool
+    protected function customUnique(int|string $value, mixed $ruleValue): bool
     {
         $ex = explode('|', $ruleValue);
         $database = Connection::getConnection();
@@ -58,7 +58,7 @@ abstract class Validators
         return (!$stmt->rowCount() > 0) ? true : false;
     }
 
-    protected function contactUniqueForUpdate(int|string $value, mixed $ruleValue): bool
+    protected function customUniqueForUpdate(int|string $value, mixed $ruleValue): bool
     {
         $ex = explode('|', $ruleValue);
         $database = Connection::getConnection();

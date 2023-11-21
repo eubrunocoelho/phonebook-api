@@ -19,12 +19,12 @@ class Validation extends Validators
                         if (!parent::unique($value, $ruleValue))
                             $this->addError('Este \'' . $item . '\' já está cadastrado.');
                         break;
-                    case 'contact-unique':
-                        if (!parent::contactUnique($value, $ruleValue)) // *custom
+                    case 'custom-unique':
+                        if (!parent::customUnique($value, $ruleValue)) // !custom
                             $this->addError('Este \'' . $item . '\' já está cadastrado.');
                         break;
-                    case 'contact-unique-for-update': // *custom
-                        if (!parent::contactUniqueForUpdate($value, $ruleValue))
+                    case 'custom-unique-for-update': // !custom
+                        if (!parent::customUniqueForUpdate($value, $ruleValue))
                             $this->addError('Este \'' . $item . '\' já está cadastrado.');
                         break;
                     case 'min':

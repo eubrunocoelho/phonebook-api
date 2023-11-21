@@ -78,13 +78,13 @@ class ContactController
                 'min' => 3,
                 'max' => 255,
                 'regex' => '/^[a-zA-ZÀ-ÿ\s]+$/u',
-                'contact-unique' => 'name|contacts|user_id|' . $this->user['id']
+                'custom-unique' => 'name|contacts|user_id|' . $this->user['id']
             ],
             'email' => [
                 'required' => false,
                 'email' => true,
                 'max' => 128,
-                'contact-unique' => 'email|contacts|user_id|' . $this->user['id']
+                'custom-unique' => 'email|contacts|user_id|' . $this->user['id']
             ]
         ];
 
@@ -115,13 +115,13 @@ class ContactController
                 'min' => 3,
                 'max' => 255,
                 'regex' => '/^[a-zA-ZÀ-ÿ\s]+$/u',
-                'contact-unique-for-update' => 'name|contacts|user_id|' . $this->user['id'] . '|id|' . $contact['id']
+                'custom-unique-for-update' => 'name|contacts|user_id|' . $this->user['id'] . '|id|' . $contact['id']
             ],
             'email' => [
                 'required' => false,
                 'email' => true,
                 'max' => 128,
-                'contact-unique-for-update' => 'email|contacts|user_id|' . $this->user['id'] . '|id|' . $contact['id']
+                'custom-unique-for-update' => 'email|contacts|user_id|' . $this->user['id'] . '|id|' . $contact['id']
             ]
         ];
 
