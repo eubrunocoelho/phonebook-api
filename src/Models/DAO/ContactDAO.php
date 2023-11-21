@@ -25,6 +25,17 @@ class ContactDAO
         return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
     }
 
+    public function getContactsByUserId(Contact $Contact): array|bool
+    {
+        $SQL = 'SELECT * FROM contacts WHERE user_id = :user_id ORDER BY id;';
+
+        $stmt = $this->database->prepare($SQL);
+        $stmt->bindValue(':user_id', $Contact->getUserId(), PDO::PARAM_STR);
+        $stmt->execute();
+
+        return ($stmt->rowCount() > 0) ? $stmt->fetchAll(PDO::FETCH_ASSOC) : false;
+    }
+
     public function register(Contact $Contact): bool|int
     {
         $SQL = 'INSERT INTO contacts (user_id, name, email) VALUES (:user_id, :name, :email);';

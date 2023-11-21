@@ -13,7 +13,6 @@ use Handlers\{
     ValidationHandler
 };
 
-use Exceptions\CustomException;
 use Services\AuthorizationService;
 use Sessions\Session;
 
@@ -36,7 +35,21 @@ class ContactController
 
     public function index()
     {
-        echo 'Contacts';
+        $ContactDAO = new ContactDAO($this->connection);
+        $Contact = new Contact();
+
+        $Contact->setUserId($this->user['id']);
+
+        $data['contacts'] = $ContactDAO->getContactsByUserId($Contact);
+
+        if (!$data['contacts']) return $this->jsonResource->toJson(404, 'Você não possui contatos registrado.');
+
+        foreach ($data['contacts'] as $key => $value) {
+            unset($data['contacts'][$key]['user_id']);
+            if (is_null($data['contacts'][$key]['email'])) unset($data['contacts'][$key]['email']);
+        }
+
+        return $this->jsonResource->toJson(200, extra: ['data' => $data]);
     }
 
     public function store()
