@@ -45,8 +45,7 @@ class ContactController
         if (!$data['contacts']) return $this->jsonResource->toJson(404, 'Você não possui contatos registrado.');
 
         foreach ($data['contacts'] as $key => $value) {
-            unset($data['contacts'][$key]['user_id']);
-
+            
             if (is_null($data['contacts'][$key]['email']) || empty($data['contacts'][$key]['email'])) unset($data['contacts'][$key]['email']);
         }
 
@@ -66,8 +65,6 @@ class ContactController
 
         if (!$data = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
         if (!AuthorizationService::checkOwner($this->user['id'], $data['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
-
-        unset($data['user_id']);
 
         if (is_null($data['email']) || empty($data['email'])) unset($data['email']);
 

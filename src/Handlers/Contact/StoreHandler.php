@@ -19,7 +19,7 @@ class StoreHandler extends Handler
         $write = [
             'user_id' => $controller->user['id'],
             'name' => $data['request']['name'],
-            'email' => (empty($data['request']['email'])) ? null : $data['request']['email']
+            'email' => (!isset($data['request']['email']) || empty($data['request']['email'])) ? null : $data['request']['email']
         ];
 
         $Contact->setUserId($write['user_id']);
@@ -32,7 +32,8 @@ class StoreHandler extends Handler
             unset($data);
 
             $data['contact'] = $ContactDAO->getContactById($Contact);
-            $data['contact']['email'] = (!isset($data['contact']['email']) || empty($data['contact']['email'])) ? 'Não informado' : $data['contact']['email'];
+
+            if (is_null($data['contact']['email']) || empty($data['contact']['email'])) unset($data['contact']['email']);
 
             return $controller->jsonResource->toJson(201, 'Contato cadastrado com sucesso!', ['data' => $data]);
         } else return $controller->jsonResource->toJson(500, 'Houve um erro interno.');

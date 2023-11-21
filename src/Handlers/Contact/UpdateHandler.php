@@ -32,7 +32,8 @@ class UpdateHandler extends Handler
             unset($data);
 
             $data['contact'] = $ContactDAO->getContactById($Contact);
-            $data['contact']['email'] = (!isset($data['contact']['email']) || empty($data['contact']['email'])) ? 'Não informado' : $data['contact']['email'];
+
+            if (is_null($data['contact']['email']) || empty($data['contact']['email'])) unset($data['contact']['email']);
 
             return $controller->jsonResource->toJson(200, 'Contato atualizado com sucesso!', ['data' => $data]);
         } else return $controller->jsonResource->toJson(500, 'Houve um erro inesperado.');
