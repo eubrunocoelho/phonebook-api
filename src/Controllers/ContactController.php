@@ -45,7 +45,6 @@ class ContactController
         if (!$data['contacts']) return $this->jsonResource->toJson(404, 'Você não possui contatos registrado.');
 
         foreach ($data['contacts'] as $key => $value) {
-            
             if (is_null($data['contacts'][$key]['email']) || empty($data['contacts'][$key]['email'])) unset($data['contacts'][$key]['email']);
         }
 
