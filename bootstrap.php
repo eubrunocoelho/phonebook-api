@@ -3,6 +3,7 @@
 session_start();
 
 require_once __DIR__ . '/app/settings.php';
+
 require_once DIR_APP . '/functions/functions.php';
 require_once DIR_APP . '/autoload.php';
 
