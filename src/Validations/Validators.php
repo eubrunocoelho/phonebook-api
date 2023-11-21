@@ -12,12 +12,12 @@ abstract class Validators
         return (!(strlen($value) > 0)) ? true : false;
     }
 
-    protected function min(int|string $value, bool|int|string $ruleValue): bool
+    protected function min(int|string $value, mixed $ruleValue): bool
     {
         return (!(strlen($value) < $ruleValue)) ? true : false;
     }
 
-    protected function max(int|string $value, bool|int|string $ruleValue): bool
+    protected function max(int|string $value, mixed $ruleValue): bool
     {
         return (!(strlen($value) > $ruleValue)) ? true : false;
     }
@@ -27,12 +27,12 @@ abstract class Validators
         return (filter_var($value, FILTER_VALIDATE_EMAIL)) ? true : false;
     }
 
-    protected function regex(int|string $value, bool|int|string $ruleValue): bool
+    protected function regex(int|string $value, mixed $ruleValue): bool
     {
         return (preg_match($ruleValue, $value)) ? true : false;
     }
 
-    protected function unique(int|string $value, bool|int|string $ruleValue): bool
+    protected function unique(int|string $value, mixed $ruleValue): bool
     {
         $ex = explode('|', $ruleValue);
         $database = Connection::getConnection();
@@ -45,7 +45,7 @@ abstract class Validators
         return (!$stmt->rowCount() > 0) ? true : false;
     }
 
-    protected function contactUnique(int|string $value, bool|int|string $ruleValue): bool
+    protected function contactUnique(int|string $value, mixed $ruleValue): bool
     {
         $ex = explode('|', $ruleValue);
         $database = Connection::getConnection();
@@ -58,7 +58,7 @@ abstract class Validators
         return (!$stmt->rowCount() > 0) ? true : false;
     }
 
-    protected function contactUniqueForUpdate(int|string $value, bool|int|string $ruleValue): bool
+    protected function contactUniqueForUpdate(int|string $value, mixed $ruleValue): bool
     {
         $ex = explode('|', $ruleValue);
         $database = Connection::getConnection();

@@ -1,7 +1,7 @@
 <?php
 
 if (!function_exists('dd')) {
-    function dd($params = [], bool $die = false): void
+    function dd(mixed $params = [], bool $die = false): void
     {
         echo '<pre>';
         var_dump($params);
