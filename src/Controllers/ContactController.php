@@ -22,7 +22,7 @@ class ContactController
     public $connection;
     public $jsonResource;
     public $jsonRequestService;
-    public $validate;
+    public $validation;
     public $user;
 
     public function __construct(array $dependency)
@@ -30,7 +30,7 @@ class ContactController
         $this->connection = $dependency['lib\Connection'];
         $this->jsonResource = $dependency['Resources\JsonResource'];
         $this->jsonRequestService = $dependency['Services\JsonRequestService'];
-        $this->validate = $dependency['Validate\Validate'];
+        $this->validation = $dependency['Validations\Validation'];
         $this->user = Session::get('user');
     }
 

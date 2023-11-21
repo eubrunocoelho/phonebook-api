@@ -15,7 +15,7 @@ class AuthController
 {
     public $jsonResource;
     public $jsonRequestService;
-    public $validate;
+    public $validation;
     public $connection;
 
     public function __construct(array $dependency)
@@ -23,7 +23,7 @@ class AuthController
         $this->connection = $dependency['lib\Connection'];
         $this->jsonResource = $dependency['Resources\JsonResource'];
         $this->jsonRequestService = $dependency['Services\JsonRequestService'];
-        $this->validate = $dependency['Validate\Validate'];
+        $this->validation = $dependency['Validations\Validation'];
     }
 
     public function register(): void

@@ -8,12 +8,12 @@ class ValidationHandler extends Handler
     {
         $data['request'] = $controller->jsonRequestService->getData();
 
-        $controller->validate->validate($data['request'], $data['rules']);
+        $controller->validation->validate($data['request'], $data['rules']);
 
-        $_errors = $controller->validate->getErrors() ?? [];
+        $_errors = $controller->validation->getErrors() ?? [];
         foreach ($_errors as $key => $value) $errors[] = $value;
 
-        if ($controller->validate->passed()) {
+        if ($controller->validation->passed()) {
             foreach ($this->successors as $successor) $data = $successor->handle($data, $controller);
 
             return $data;

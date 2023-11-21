@@ -1,8 +1,8 @@
 <?php
 
-namespace Validate;
+namespace Validations;
 
-class Validate extends Validators
+class Validation extends Validators
 {
     private $errors;
 
