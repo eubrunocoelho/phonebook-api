@@ -31,7 +31,7 @@ CREATE TABLE contacts (
 CREATE TABLE phones (
     id BIGINT NOT NULL AUTO_INCREMENT,
     contact_id BIGINT NOT NULL,
-    phonenumber VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     PRIMARY KEY (id),
     FOREIGN KEY (contact_id) REFERENCES contacts (id)
