@@ -50,9 +50,9 @@ class AuthController
         ];
 
         $ValidationHandler = new ValidationHandler();
-        $StoreHandler = new UserStoreHandler();
+        $UserStoreHandler = new UserStoreHandler();
 
-        $ValidationHandler->setSuccessor($StoreHandler);
+        $ValidationHandler->setSuccessor($UserStoreHandler);
         $ValidationHandler->handle($data, $this);
     }
 

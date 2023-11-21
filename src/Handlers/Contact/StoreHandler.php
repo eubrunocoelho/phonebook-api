@@ -11,7 +11,7 @@ use Handlers\Handler;
 
 class StoreHandler extends Handler
 {
-    public function handle($data, $controller)
+    public function handle(array $data, Object $controller): Object
     {
         $ContactDAO = new ContactDAO($controller->connection);
         $Contact = new Contact();
@@ -25,14 +25,14 @@ class StoreHandler extends Handler
         $Contact->setUserId($write['user_id']);
         $Contact->setName($write['name']);
         $Contact->setEmail($write['email']);
-        $resultId = $ContactDAO->register($Contact);
 
-        if ($resultId !== false) {
+        if ($resultId = $ContactDAO->register($Contact)) {
+            $Contact->setId($resultId);
+
             unset($data);
 
-            $Contact->setId($resultId);
-            $data = $ContactDAO->getContactById($Contact);
-            $data['email'] = (!isset($data['email']) || empty($data['email'])) ? 'Não informado' : $data['email'];
+            $data['contact'] = $ContactDAO->getContactById($Contact);
+            $data['contact']['email'] = (!isset($data['contact']['email']) || empty($data['contact']['email'])) ? 'Não informado' : $data['contact']['email'];
 
             return $controller->jsonResource->toJson(201, 'Contato cadastrado com sucesso!', ['data' => $data]);
         } else return $controller->jsonResource->toJson(500, 'Houve um erro interno.');

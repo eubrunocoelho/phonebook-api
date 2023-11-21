@@ -11,7 +11,7 @@ use Handlers\Handler;
 
 class UpdateHandler extends Handler
 {
-    public function handle($data, $controller)
+    public function handle(array $data, Object $controller): Object
     {
         $ContactDAO = new ContactDAO($controller->connection);
         $Contact = new Contact();
@@ -27,10 +27,12 @@ class UpdateHandler extends Handler
         $Contact->setEmail($write['email']);
 
         if ($ContactDAO->update($Contact)) {
+            $Contact->setId($data['contact_id']);
+
             unset($data);
 
-            $data = $ContactDAO->getContactById($Contact);
-            $data['email'] = (!isset($data['email']) || empty($data['email'])) ? 'Não informado' : $data['email'];
+            $data['contact'] = $ContactDAO->getContactById($Contact);
+            $data['contact']['email'] = (!isset($data['contact']['email']) || empty($data['contact']['email'])) ? 'Não informado' : $data['contact']['email'];
 
             return $controller->jsonResource->toJson(200, 'Contato atualizado com sucesso!', ['data' => $data]);
         } else return $controller->jsonResource->toJson(500, 'Houve um erro inesperado.');

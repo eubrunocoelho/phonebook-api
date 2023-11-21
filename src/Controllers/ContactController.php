@@ -1,7 +1,5 @@
 <?php
 
-// ... do working
-
 namespace Controllers;
 
 use Models\{
@@ -10,8 +8,8 @@ use Models\{
 };
 
 use Handlers\{
-    Contact\StoreHandler,
-    Contact\UpdateHandler,
+    Contact\StoreHandler as ContactStoreHandler,
+    Contact\UpdateHandler as ContactUpdateHandler,
     ValidationHandler
 };
 
@@ -59,11 +57,11 @@ class ContactController
             ]
         ];
 
-        $validationHandler = new ValidationHandler();
-        $storeHandler = new StoreHandler();
+        $ValidationHandler = new ValidationHandler();
+        $ContactStoreHandler = new ContactStoreHandler();
 
-        $validationHandler->setSuccessor($storeHandler);
-        $validationHandler->handle($data, $this);
+        $ValidationHandler->setSuccessor($ContactStoreHandler);
+        $ValidationHandler->handle($data, $this);
     }
 
     public function update($params)
@@ -98,10 +96,10 @@ class ContactController
 
         $data['contact_id'] = $contact['id'];
 
-        $validationHandler = new ValidationHandler();
-        $updateHandler = new UpdateHandler();
+        $ValidationHandler = new ValidationHandler();
+        $ConactUpdateHandler = new ContactUpdateHandler();
 
-        $validationHandler->setSuccessor($updateHandler);
-        $validationHandler->handle($data, $this);
+        $ValidationHandler->setSuccessor($ConactUpdateHandler);
+        $ValidationHandler->handle($data, $this);
     }
 }

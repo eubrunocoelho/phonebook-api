@@ -48,7 +48,7 @@ class StoreHandler extends Handler
                 unset($data['user']['token']['user_id']);
 
                 return $controller->jsonResource->toJson(200, 'Usuário autenticado com sucesso!', ['data' => $data]);
-            }
+            } else return $controller->jsonResource->toJson(500, 'Houve um erro interno.');
         } else {
             foreach ($this->successors as $successor) $data = $successor->handle($data, $controller);
 
