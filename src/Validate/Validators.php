@@ -2,7 +2,7 @@
 
 namespace Validate;
 
-use lib\ConnectionFactory;
+use lib\Connection;
 use PDO;
 
 abstract class Validators
@@ -35,7 +35,7 @@ abstract class Validators
     protected function unique(int|string $value, bool|int|string $ruleValue): bool
     {
         $ex = explode('|', $ruleValue);
-        $database = ConnectionFactory::getConnection();
+        $database = Connection::getConnection();
 
         $SQL = 'SELECT * FROM ' . $ex[1] . ' WHERE ' . $ex[0] . ' = :value;';
         $stmt = $database->prepare($SQL);
@@ -48,7 +48,7 @@ abstract class Validators
     protected function contactUnique(int|string $value, bool|int|string $ruleValue): bool
     {
         $ex = explode('|', $ruleValue);
-        $database = ConnectionFactory::getConnection();
+        $database = Connection::getConnection();
 
         $SQL = 'SELECT * FROM ' . $ex[1] . ' WHERE ' . $ex[2] . ' = ' . $ex[3] . ' AND ' . $ex[0] . ' = :value';
         $stmt = $database->prepare($SQL);
@@ -61,7 +61,7 @@ abstract class Validators
     protected function contactUniqueForUpdate(int|string $value, bool|int|string $ruleValue): bool
     {
         $ex = explode('|', $ruleValue);
-        $database = ConnectionFactory::getConnection();
+        $database = Connection::getConnection();
 
         $SQL = 'SELECT * FROM ' . $ex[1] . ' WHERE ' . $ex[2] . ' = ' . $ex[3] . ' AND ' . $ex[0] . ' = :value AND ' . $ex[4] . ' != ' . $ex[5] . ';';
         $stmt = $database->prepare($SQL);

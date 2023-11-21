@@ -49,6 +49,6 @@ class Dispatcher
         if (class_exists($controller) && method_exists($controller, $action)) {
             $controller = new $controller($dependencies);
             $controller->$action($this->router->getParams());
-        }
+        } else throw new CustomException('Houve um erro interno.', 500);
     }
 }

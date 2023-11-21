@@ -2,7 +2,7 @@
 
 namespace Middlewares;
 
-use lib\ConnectionFactory;
+use lib\Connection;
 use Models\DAO\TokenDAO;
 use Models\DAO\UserDAO;
 use Models\Token;
@@ -17,7 +17,7 @@ class Authentication
 
     public static function authorization()
     {
-        self::$connection = ConnectionFactory::getConnection();
+        self::$connection = Connection::getConnection();
 
         $headers = getallheaders();
         $jsonResource = new JsonResource();

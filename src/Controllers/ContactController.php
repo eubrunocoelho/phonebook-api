@@ -27,7 +27,7 @@ class ContactController
 
     public function __construct(array $dependency)
     {
-        $this->connection = $dependency['lib\ConnectionFactory'];
+        $this->connection = $dependency['lib\Connection'];
         $this->jsonResource = $dependency['Resources\JsonResource'];
         $this->jsonRequestService = $dependency['Services\JsonRequestService'];
         $this->validate = $dependency['Validate\Validate'];
@@ -68,14 +68,14 @@ class ContactController
     {
         $contactId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
 
-        if (!$contactId) throw new CustomException('Contato inexistente.', 404);
+        if (!$contactId) return $this->jsonResource->toJson(404, 'Contato inexistente.');
 
         $ContactDAO = new ContactDAO($this->connection);
 
         $Contact = new Contact();
         $Contact->setId($contactId);
 
-        if (!$contact = $ContactDAO->getContactById($Contact)) throw new CustomException('Contato inexistente.', 404);
+        if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
         if (!AuthorizationService::checkOwner($this->user['id'], $contact['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
 
         $data['rules'] = [
