@@ -4,7 +4,7 @@ namespace Resources;
 
 class JsonResource
 {
-    public function toJson(int $status, string $message = null, array $extra = []): void
+    public function toJson(int $status, mixed $message = null, array $extra = []): void
     {
         $response['status'] = $status;
 
