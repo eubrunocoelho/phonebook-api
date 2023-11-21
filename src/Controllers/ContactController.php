@@ -51,7 +51,7 @@ class ContactController
         return $this->jsonResource->toJson(200, extra: ['data' => $data]);
     }
 
-    public function show($params): JsonResource
+    public function show(array $params): JsonResource
     {
         $contactId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
 
@@ -62,12 +62,12 @@ class ContactController
 
         $Contact->setId($contactId);
 
-        if (!$data = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
-        if (!AuthorizationService::checkOwner($this->user['id'], $data['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
+        if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
+        if (!AuthorizationService::checkOwner($this->user['id'], $contact['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
 
-        if (is_null($data['email']) || empty($data['email'])) unset($data['email']);
+        if (is_null($contact['email']) || empty($contact['email'])) unset($dacontactta['email']);
 
-        return $this->jsonResource->toJson(200, extra: ['data' => $data]);
+        return $this->jsonResource->toJson(200, extra: ['data' => $contact]);
     }
 
     public function store(): void
@@ -95,7 +95,7 @@ class ContactController
         $ValidationHandler->handle($data, $this);
     }
 
-    public function update($params): mixed
+    public function update(array $params): mixed
     {
         $contactId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
 
