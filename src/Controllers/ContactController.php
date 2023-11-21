@@ -12,7 +12,7 @@ use Handlers\{
     Contact\UpdateHandler as ContactUpdateHandler,
     ValidationHandler
 };
-
+use Resources\JsonResource;
 use Services\AuthorizationService;
 use Sessions\Session;
 
@@ -33,7 +33,7 @@ class ContactController
         $this->user = Session::get('user');
     }
 
-    public function index()
+    public function index(): JsonResource
     {
         $ContactDAO = new ContactDAO($this->connection);
         $Contact = new Contact();
@@ -46,13 +46,35 @@ class ContactController
 
         foreach ($data['contacts'] as $key => $value) {
             unset($data['contacts'][$key]['user_id']);
-            if (is_null($data['contacts'][$key]['email'])) unset($data['contacts'][$key]['email']);
+
+            if (is_null($data['contacts'][$key]['email']) || empty($data['contacts'][$key]['email'])) unset($data['contacts'][$key]['email']);
         }
 
         return $this->jsonResource->toJson(200, extra: ['data' => $data]);
     }
 
-    public function store()
+    public function show($params): JsonResource
+    {
+        $contactId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
+
+        if (!$contactId) return $this->jsonResource->toJson(404, 'Contato inexistente.');
+
+        $ContactDAO = new ContactDAO($this->connection);
+        $Contact = new Contact();
+
+        $Contact->setId($contactId);
+
+        if (!$data = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
+        if (!AuthorizationService::checkOwner($this->user['id'], $data['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
+
+        unset($data['user_id']);
+
+        if (is_null($data['email']) || empty($data['email'])) unset($data['email']);
+
+        return $this->jsonResource->toJson(200, extra: ['data' => $data]);
+    }
+
+    public function store(): void
     {
         $data['rules'] = [
             'name' => [
@@ -77,15 +99,15 @@ class ContactController
         $ValidationHandler->handle($data, $this);
     }
 
-    public function update($params)
+    public function update($params): mixed
     {
         $contactId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
 
         if (!$contactId) return $this->jsonResource->toJson(404, 'Contato inexistente.');
 
         $ContactDAO = new ContactDAO($this->connection);
-
         $Contact = new Contact();
+
         $Contact->setId($contactId);
 
         if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
