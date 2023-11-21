@@ -19,7 +19,7 @@ class UserDAO
         $SQL = 'SELECT * FROM users WHERE id = :id LIMIT 1;';
 
         $stmt = $this->database->prepare($SQL);
-        $stmt->bindValue(':id', $User->getId());
+        $stmt->bindValue(':id', $User->getId(), PDO::PARAM_INT);
         $stmt->execute();
 
         return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
