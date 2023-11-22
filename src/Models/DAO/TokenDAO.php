@@ -16,7 +16,7 @@ class TokenDAO
 
     public function getTokenById(Token $Token): array|bool
     {
-        $SQL = 'SELECT * FROM tokens WHERE id = :id LIMIT 1;';
+        $SQL = 'SELECT * FROM tokens WHERE id = :id LIMIT 1';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':id', $Token->getId(), PDO::PARAM_STR);
@@ -27,7 +27,7 @@ class TokenDAO
 
     public function getTokenByUserId(Token $Token): array|bool
     {
-        $SQL = 'SELECT * FROM tokens WHERE user_id = :user_id LIMIT 1;';
+        $SQL = 'SELECT * FROM tokens WHERE user_id = :user_id LIMIT 1';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':user_id', $Token->getUserId(), PDO::PARAM_STR);
@@ -38,7 +38,7 @@ class TokenDAO
 
     public function getTokenByUserIdAndExpirationDate(Token $Token): array|bool
     {
-        $SQL = 'SELECT * FROM tokens WHERE user_id = :user_id AND expiration_date > NOW() LIMIT 1;';
+        $SQL = 'SELECT * FROM tokens WHERE user_id = :user_id AND expiration_date > NOW() LIMIT 1';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':user_id', $Token->getUserId(), PDO::PARAM_INT);
@@ -49,7 +49,7 @@ class TokenDAO
 
     public function getTokenByTokenAndExpirationDate(Token $Token): array|bool
     {
-        $SQL = 'SELECT * FROM tokens WHERE token = :token AND expiration_date > NOW() LIMIT 1;';
+        $SQL = 'SELECT * FROM tokens WHERE token = :token AND expiration_date > NOW() LIMIT 1';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':token', $Token->getToken(), PDO::PARAM_STR);
@@ -60,7 +60,7 @@ class TokenDAO
 
     public function register(Token $Token): int|bool
     {
-        $SQL = 'INSERT INTO tokens (user_id, token, expiration_date) VALUES (:user_id, :token, :expiration_date);';
+        $SQL = 'INSERT INTO tokens (user_id, token, expiration_date) VALUES (:user_id, :token, :expiration_date)';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':user_id', $Token->getUserId(), PDO::PARAM_INT);
@@ -73,7 +73,7 @@ class TokenDAO
 
     public function update(Token $Token): bool
     {
-        $SQL = 'UPDATE tokens SET token = :token, expiration_date = :expiration_date WHERE id = :id;';
+        $SQL = 'UPDATE tokens SET token = :token, expiration_date = :expiration_date WHERE id = :id';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':token', $Token->getToken(), PDO::PARAM_STR);

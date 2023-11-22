@@ -2,9 +2,12 @@
 
 namespace Handlers\Phone;
 
+use Models\{
+    DAO\PhoneDAO,
+    Phone
+};
+
 use Handlers\Handler;
-use Models\DAO\PhoneDAO;
-use Models\Phone;
 
 class StoreHandler extends Handler
 {
@@ -18,11 +21,11 @@ class StoreHandler extends Handler
             'phone_number' => $data['request']['phone_number'],
             'description' => (!isset($data['request']['description']) || empty($data['request']['description'])) ? null : $data['request']['description']
         ];
-        
+
         $Phone->setContactId($write['contact_id']);
         $Phone->setPhoneNumber($write['phone_number']);
         $Phone->setDescription($write['description']);
-        
+
         if ($resultId = $PhoneDAO->register($Phone)) {
             $Phone->setId($resultId);
 
@@ -33,6 +36,6 @@ class StoreHandler extends Handler
             if (is_null($data['phone']['description']) || empty($data['phone']['description'])) unset($data['phone']['description']);
 
             return $controller->jsonResource->toJson(201, 'Telefone adicionado com sucesso!', ['data' => $data]);
-        } else return $controller->jsonResource->toJson(500, 'Houve um erro inesperado.');
+        } else return $controller->jsonResource->toJson(500, 'Houve um erro interno.');
     }
 }

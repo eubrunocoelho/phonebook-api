@@ -37,7 +37,7 @@ abstract class Validators
         $ex = explode('|', $ruleValue);
         $database = Connection::getConnection();
 
-        $SQL = 'SELECT * FROM ' . $ex[1] . ' WHERE ' . $ex[0] . ' = :value;';
+        $SQL = 'SELECT * FROM ' . $ex[1] . ' WHERE ' . $ex[0] . ' = :value';
         $stmt = $database->prepare($SQL);
         $stmt->bindValue(':value', $value, PDO::PARAM_STR);
         $stmt->execute();
@@ -63,7 +63,7 @@ abstract class Validators
         $ex = explode('|', $ruleValue);
         $database = Connection::getConnection();
 
-        $SQL = 'SELECT * FROM ' . $ex[1] . ' WHERE ' . $ex[2] . ' = ' . $ex[3] . ' AND ' . $ex[0] . ' = :value AND ' . $ex[4] . ' != ' . $ex[5] . ';';
+        $SQL = 'SELECT * FROM ' . $ex[1] . ' WHERE ' . $ex[2] . ' = ' . $ex[3] . ' AND ' . $ex[0] . ' = :value AND ' . $ex[4] . ' != ' . $ex[5];
         $stmt = $database->prepare($SQL);
         $stmt->bindValue(':value', $value, PDO::PARAM_STR);
         $stmt->execute();

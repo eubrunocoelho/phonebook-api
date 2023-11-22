@@ -36,6 +36,6 @@ class StoreHandler extends Handler
             unset($data['password']);
 
             return $controller->jsonResource->toJson(201, 'Usuário cadastrado com sucesso!', ['data' => $data]);
-        }
+        } else return $controller->jsonResource->toJson(500, 'Houve um erro interno.');
     }
 }

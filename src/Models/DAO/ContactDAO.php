@@ -16,7 +16,7 @@ class ContactDAO
 
     public function getContactById(Contact $Contact): array|bool
     {
-        $SQL = 'SELECT * FROM contacts WHERE id = :id LIMIT 1;';
+        $SQL = 'SELECT * FROM contacts WHERE id = :id LIMIT 1';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':id', $Contact->getId(), PDO::PARAM_INT);
@@ -27,7 +27,7 @@ class ContactDAO
 
     public function getContactsByUserId(Contact $Contact): array|bool
     {
-        $SQL = 'SELECT * FROM contacts WHERE user_id = :user_id ORDER BY id;';
+        $SQL = 'SELECT * FROM contacts WHERE user_id = :user_id ORDER BY id';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':user_id', $Contact->getUserId(), PDO::PARAM_STR);
@@ -38,7 +38,7 @@ class ContactDAO
 
     public function register(Contact $Contact): bool|int
     {
-        $SQL = 'INSERT INTO contacts (user_id, name, email) VALUES (:user_id, :name, :email);';
+        $SQL = 'INSERT INTO contacts (user_id, name, email) VALUES (:user_id, :name, :email)';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':user_id', $Contact->getUserId(), PDO::PARAM_INT);
@@ -51,7 +51,7 @@ class ContactDAO
 
     public function update(Contact $Contact): bool
     {
-        $SQL = 'UPDATE contacts SET name = :name, email = :email WHERE id = :id;';
+        $SQL = 'UPDATE contacts SET name = :name, email = :email WHERE id = :id';
 
         $stmt = $this->database->prepare($SQL);
         $stmt->bindValue(':name', $Contact->getName(), PDO::PARAM_STR);

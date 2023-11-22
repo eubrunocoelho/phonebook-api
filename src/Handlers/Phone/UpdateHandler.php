@@ -2,9 +2,12 @@
 
 namespace Handlers\Phone;
 
+use Models\{
+    DAO\PhoneDAO,
+    Phone
+};
+
 use Handlers\Handler;
-use Models\DAO\PhoneDAO;
-use Models\Phone;
 
 class UpdateHandler extends Handler
 {
@@ -18,11 +21,11 @@ class UpdateHandler extends Handler
             'phone_number' => $data['request']['phone_number'],
             'description' => (!isset($data['request']['description']) || empty($data['request']['description'])) ? null : $data['request']['description']
         ];
-        
+
         $Phone->setId($write['id']);
         $Phone->setPhoneNumber($write['phone_number']);
         $Phone->setDescription($write['description']);
-        
+
         if ($PhoneDAO->update($Phone)) {
             $Phone->setId($data['phone_id']);
 

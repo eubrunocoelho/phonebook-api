@@ -2,13 +2,19 @@
 
 namespace Controllers;
 
-use Handlers\Phone\StoreHandler as PhoneStoreHandler;
-use Handlers\Phone\UpdateHandler as PhoneUpdateHandler;
-use Handlers\ValidationHandler;
-use Models\Contact;
-use Models\DAO\ContactDAO;
-use Models\DAO\PhoneDAO;
-use Models\Phone;
+use Models\{
+    Contact,
+    DAO\ContactDAO,
+    DAO\PhoneDAO,
+    Phone
+};
+
+use Handlers\{
+    Phone\StoreHandler as PhoneStoreHandler,
+    Phone\UpdateHandler as PhoneUpdateHandler,
+    ValidationHandler
+};
+
 use Services\AuthorizationService;
 use Sessions\Session;
 
@@ -29,7 +35,7 @@ class PhoneController
         $this->user = Session::get('user');
     }
 
-    public function store(array $params)
+    public function store(array $params): mixed
     {
         $contactId = (!filter_var($params['contactId'], FILTER_VALIDATE_INT) === false) ? $params['contactId'] : false;
 
@@ -65,7 +71,7 @@ class PhoneController
         $ValidationHandler->handle($data, $this);
     }
 
-    public function update(array $params)
+    public function update(array $params): mixed
     {
         $phoneId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
 
