@@ -47,6 +47,7 @@ class PhoneController
         $Contact->setId($contactId);
 
         if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
+
         if (!AuthorizationService::checkOwner($this->user['id'], $contact['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
 
         $data['rules'] = [
@@ -90,6 +91,7 @@ class PhoneController
         $Contact->setId($phone['contact_id']);
 
         if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
+
         if (!AuthorizationService::checkOwner($this->user['id'], $contact['id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
 
         $data['rules'] = [
