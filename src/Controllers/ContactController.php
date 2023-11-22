@@ -112,7 +112,7 @@ class ContactController
         $ValidationHandler->handle($data, $this);
     }
 
-    public function update(array $params): mixed
+    public function update(array $params): JsonResource
     {
         $contactId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
 

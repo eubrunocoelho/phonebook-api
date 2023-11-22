@@ -14,7 +14,7 @@ use Handlers\{
     Phone\UpdateHandler as PhoneUpdateHandler,
     ValidationHandler
 };
-
+use Resources\JsonResource;
 use Services\AuthorizationService;
 use Sessions\Session;
 
@@ -35,7 +35,7 @@ class PhoneController
         $this->user = Session::get('user');
     }
 
-    public function store(array $params): mixed
+    public function store(array $params): JsonResource
     {
         $contactId = (!filter_var($params['contactId'], FILTER_VALIDATE_INT) === false) ? $params['contactId'] : false;
 
@@ -72,7 +72,7 @@ class PhoneController
         $ValidationHandler->handle($data, $this);
     }
 
-    public function update(array $params): mixed
+    public function update(array $params): JsonResource
     {
         $phoneId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
 
