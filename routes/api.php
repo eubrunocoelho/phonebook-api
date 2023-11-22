@@ -76,3 +76,15 @@ $router->post('/phones/{contactId}', 'Controllers\PhoneController::store')
 
         return (!!$isAuth) ? true : false;
     });
+
+$router->put('/phones/{id}', 'Controllers\PhoneController::update')
+    ->before(function () use ($method) {
+        Cors::handleCorsHeaders($method);
+
+        return true;
+    })
+    ->before(function () {
+        $isAuth = Authentication::authorization();
+
+        return (!!$isAuth) ? true : false;
+    });
