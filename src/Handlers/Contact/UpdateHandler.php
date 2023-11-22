@@ -36,6 +36,6 @@ class UpdateHandler extends Handler
             if (is_null($data['contact']['email']) || empty($data['contact']['email'])) unset($data['contact']['email']);
 
             return $controller->jsonResource->toJson(200, 'Contato atualizado com sucesso!', ['data' => $data]);
-        } else return $controller->jsonResource->toJson(500, 'Houve um erro inesperado.');
+        } else return $controller->jsonResource->toJson(500, 'Houve um erro interno.');
     }
 }
