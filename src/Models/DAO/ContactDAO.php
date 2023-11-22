@@ -49,7 +49,7 @@ class ContactDAO
         return ($stmt->rowCount() > 0) ? $this->database->lastInsertId() : false;
     }
 
-    public function update(Contact $Contact)
+    public function update(Contact $Contact): bool
     {
         $SQL = 'UPDATE contacts SET name = :name, email = :email WHERE id = :id;';
 
