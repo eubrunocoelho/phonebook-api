@@ -25,6 +25,17 @@ class PhoneDAO
         return ($stmt->rowCount() > 0) ? $stmt->fetch(PDO::FETCH_ASSOC) : false;
     }
 
+    public function getPhonesByContactId(Phone $Phone): array|bool
+    {
+        $SQL = 'SELECT * FROM phones WHERE contact_id = :contact_id ORDER BY id';
+
+        $stmt = $this->database->prepare($SQL);
+        $stmt->bindValue(':contact_id', $Phone->getContactId(), PDO::PARAM_INT);
+        $stmt->execute();
+
+        return ($stmt->rowCount() > 0) ? $stmt->fetchAll(PDO::FETCH_ASSOC) : false;
+    }
+
     public function register(Phone $Phone): bool|int
     {
         $SQL = 'INSERT INTO phones (contact_id, phone_number, description) VALUES (:contact_id, :phone_number, :description)';

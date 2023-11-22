@@ -4,7 +4,9 @@ namespace Controllers;
 
 use Models\{
     Contact,
-    DAO\ContactDAO
+    DAO\ContactDAO,
+    DAO\PhoneDAO,
+    Phone
 };
 
 use Handlers\{
@@ -12,6 +14,7 @@ use Handlers\{
     Contact\UpdateHandler as ContactUpdateHandler,
     ValidationHandler
 };
+
 use Resources\JsonResource;
 use Services\AuthorizationService;
 use Sessions\Session;
@@ -62,12 +65,26 @@ class ContactController
 
         $Contact->setId($contactId);
 
-        if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
-        if (!AuthorizationService::checkOwner($this->user['id'], $contact['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
+        if (!$data['contact'] = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
 
-        if (is_null($contact['email']) || empty($contact['email'])) unset($dacontactta['email']);
+        if (!AuthorizationService::checkOwner($this->user['id'], $data['contact']['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
 
-        return $this->jsonResource->toJson(200, extra: ['data' => $contact]);
+        if (is_null($data['contact']['email']) || empty($data['contact']['email'])) unset($data['contact']['email']);
+
+        $PhoneDAO = new PhoneDAO($this->connection);
+        $Phone = new Phone();
+
+        $Phone->setContactId($data['contact']['id']);
+
+        $phones = $PhoneDAO->getPhonesByContactId($Phone);
+
+        if ($phones !== false && is_array($phones)) foreach ($phones as $key => $value) {
+            if (is_null($phones[$key]['description']) || empty($phones[$key]['description'])) unset($phones[$key]['description']);
+            
+            $data['contact']['phones'] = $phones;
+        }
+
+        return $this->jsonResource->toJson(200, extra: ['data' => $data]);
     }
 
     public function store(): void
@@ -107,6 +124,7 @@ class ContactController
         $Contact->setId($contactId);
 
         if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
+        
         if (!AuthorizationService::checkOwner($this->user['id'], $contact['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
 
         $data['rules'] = [
