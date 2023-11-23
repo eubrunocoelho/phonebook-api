@@ -88,3 +88,15 @@ $router->put('/phones/{id}', 'Controllers\PhoneController::update')
 
         return (!!$isAuth) ? true : false;
     });
+
+$router->delete('/phones/{id}', 'Controllers\PhoneController::delete')
+    ->before(function () use ($method) {
+        Cors::handleCorsHeaders($method);
+
+        return true;
+    })
+    ->before(function () {
+        $isAuth = Authentication::authorization();
+
+        return (!!$isAuth) ? true : false;
+    });
