@@ -56,9 +56,8 @@ class Authentication
         $User = new User();
 
         $User->setId($userId);
-        $result = $UserDAO->getUserById($User);
 
-        if ($result !== false) {
+        if (($result = $UserDAO->getUserById($User)) !== false) {
             Session::put('user', $result);
 
             return true;
