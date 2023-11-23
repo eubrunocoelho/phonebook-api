@@ -28,8 +28,7 @@ class Dispatcher
 
         $data = $result->getData();
 
-        foreach ($data['before'] as $before)
-            if (!$before($this->router->getParams())) die();
+        foreach ($data['before'] as $before) if (!$before($this->router->getParams())) die();
 
         if ($data['action'] instanceof Closure) $data['action']($this->router->getParams(), $this->dependencies);
         elseif (is_string($data['action'])) {
@@ -40,8 +39,7 @@ class Dispatcher
             $this->loadController($controller, $action, $this->dependencies);
         }
 
-        foreach ($data['after'] as $after)
-            if (!$after($this->router->getParams())) die();
+        foreach ($data['after'] as $after) if (!$after($this->router->getParams())) die();
     }
 
     public function loadController(string $controller, string $action, array $dependencies): void

@@ -58,11 +58,9 @@ class Router
 
     public function handler(): Object
     {
-        if ($this->checkDuplicates($this->routes['routes']))
-            throw new CustomException('Existem rotas duplicadas.', 500);
+        if ($this->checkDuplicates($this->routes['routes'])) throw new CustomException('Existem rotas duplicadas.', 500);
 
-        if (isset($this->routes[$this->method][$this->path]))
-            return $this->routes[$this->method][$this->path];
+        if (isset($this->routes[$this->method][$this->path])) return $this->routes[$this->method][$this->path];
         
         foreach ($this->routes[$this->method] as $route => $action) {
             $result = $this->checkUrl($route, $this->path);
@@ -104,8 +102,7 @@ class Router
 
         $params = [];
 
-        if ($result > 0) foreach ($names as $key => $value)
-            $params[$value] = $variables[$key + 1];
+        if ($result > 0) foreach ($names as $key => $value) $params[$value] = $variables[$key + 1];
 
         $this->params = $params;
 
