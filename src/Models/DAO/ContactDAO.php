@@ -60,4 +60,14 @@ class ContactDAO
 
         return ($stmt->execute()) ? true : false;
     }
+
+    public function deleteContactById(Contact $Contact): bool
+    {
+        $SQL = 'DELETE FROM contacts WHERE id = :id';
+
+        $stmt = $this->database->prepare($SQL);
+        $stmt->bindValue(':id', $Contact->getId(), PDO::PARAM_INT);
+
+        return ($stmt->execute()) ? true : false;
+    }
 }
