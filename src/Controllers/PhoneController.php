@@ -92,7 +92,7 @@ class PhoneController
 
         if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
 
-        if (!AuthorizationService::checkOwner($this->user['id'], $contact['id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
+        if (!AuthorizationService::checkOwner($this->user['id'], $contact['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
 
         $data['rules'] = [
             'phone_number' => [
@@ -114,5 +114,31 @@ class PhoneController
 
         $ValidationHandler->setSuccessor($PhoneUpdateHandler);
         $ValidationHandler->handle($data, $this);
+    }
+
+    public function delete(array $params): JsonResource
+    {
+        $phoneId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
+
+        if (!$phoneId) return $this->jsonResource->toJson(404, 'Telefone inexistente.');
+
+        $PhoneDAO = new PhoneDAO($this->connection);
+        $Phone = new Phone();
+
+        $Phone->setId($phoneId);
+
+        if (!$phone = $PhoneDAO->getPhoneById($Phone)) return $this->jsonResource->toJson(404, 'Telefone inexistente.');
+
+        $ContactDAO = new ContactDAO($this->connection);
+        $Contact = new Contact();
+
+        $Contact->setId($phone['contact_id']);
+
+        if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
+
+        if (!AuthorizationService::checkOwner($this->user['id'], $contact['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
+    
+        if ($PhoneDAO->deletePhoneById($Phone)) return $this->jsonResource->toJson(204);
+        else return $this->jsonResource->toJson(500, 'Houve um erro interno.');
     }
 }
