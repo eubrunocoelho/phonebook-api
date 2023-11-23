@@ -65,6 +65,18 @@ $router->put('/contacts/{id}', 'Controllers\ContactController::update')
         return (!!$isAuth) ? true : false;
     });
 
+$router->delete('/contacts/{id}', 'Controllers\ContactController::delete')
+    ->before(function () use ($method) {
+        Cors::handleCorsHeaders($method);
+
+        return true;
+    })
+    ->before(function () {
+        $isAuth = Authentication::authorization();
+
+        return (!!$isAuth) ? true : false;
+    });
+
 $router->post('/phones/{contactId}', 'Controllers\PhoneController::store')
     ->before(function () use ($method) {
         Cors::handleCorsHeaders($method);
