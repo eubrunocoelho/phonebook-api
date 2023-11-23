@@ -59,7 +59,7 @@ class Router
     public function handler(): Object
     {
         if ($this->checkDuplicates($this->routes['routes']))
-            throw new CustomException('Houve um erro interno.', 500);
+            throw new CustomException('Existem rotas duplicadas.', 500);
 
         if (isset($this->routes[$this->method][$this->path]))
             return $this->routes[$this->method][$this->path];
