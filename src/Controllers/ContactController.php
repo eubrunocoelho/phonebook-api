@@ -80,7 +80,7 @@ class ContactController
 
         if ($phones !== false && is_array($phones)) foreach ($phones as $key => $value) {
             if (is_null($phones[$key]['description']) || empty($phones[$key]['description'])) unset($phones[$key]['description']);
-            
+
             $data['contact']['phones'] = $phones;
         }
 
@@ -124,7 +124,7 @@ class ContactController
         $Contact->setId($contactId);
 
         if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
-        
+
         if (!AuthorizationService::checkOwner($this->user['id'], $contact['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
 
         $data['rules'] = [
@@ -150,5 +150,31 @@ class ContactController
 
         $ValidationHandler->setSuccessor($ConactUpdateHandler);
         $ValidationHandler->handle($data, $this);
+    }
+
+    public function delete(array $params)
+    {
+        $contactId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
+
+        if (!$contactId) return $this->jsonResource->toJson(404, 'Contato inexistente.');
+
+        $ContactDAO = new ContactDAO($this->connection);
+        $Contact = new Contact();
+
+        $Contact->setId($contactId);
+
+        if (!$contact = $ContactDAO->getContactById($Contact)) return $this->jsonResource->toJson(404, 'Contato inexistente.');
+
+        if (!AuthorizationService::checkOwner($this->user['id'], $contact['user_id'])) return $this->jsonResource->toJson(401, 'Você não tem permissão para executar esta ação.');
+
+        $PhoneDAO = new PhoneDAO($this->connection);
+        $Phone = new Phone();
+
+        $Phone->setContactId($contact['id']);
+
+        if (!$PhoneDAO->deletePhonesByContactId($Phone)) return $this->jsonResource->toJson(500, 'Houve um erro interno.');
+
+        if ($ContactDAO->deleteContactById($Contact)) return $this->jsonResource->toJson(204);
+        else return $this->jsonResource->toJson(500, 'Houve um erro interno.');
     }
 }
