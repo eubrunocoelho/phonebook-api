@@ -60,4 +60,14 @@ class PhoneDAO
 
         return ($stmt->execute()) ? true : false;
     }
+
+    public function deletePhoneById(Phone $Phone): bool
+    {
+        $SQL = 'DELETE FROM phones WHERE id = :id';
+
+        $stmt = $this->database->prepare($SQL);
+        $stmt->bindValue(':id', $Phone->getId(), PDO::PARAM_INT);
+
+        return ($stmt->execute()) ? true : false;
+    }
 }
