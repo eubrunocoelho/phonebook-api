@@ -152,7 +152,7 @@ class ContactController
         $ValidationHandler->handle($data, $this);
     }
 
-    public function delete(array $params)
+    public function delete(array $params): JsonResource
     {
         $contactId = (!filter_var($params['id'], FILTER_VALIDATE_INT) === false) ? $params['id'] : false;
 
