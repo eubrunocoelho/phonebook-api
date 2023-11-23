@@ -2,62 +2,68 @@
 
 namespace Middlewares;
 
+use Models\{
+    DAO\TokenDAO,
+    DAO\UserDAO,
+    Token,
+    User
+};
+
 use lib\Connection;
-use Models\DAO\TokenDAO;
-use Models\DAO\UserDAO;
-use Models\Token;
-use Models\User;
 use Resources\JsonResource;
 use Sessions\Session;
 
 class Authentication
 {
     private static $connection;
-    private static $jsonResource;
 
-    public static function authorization()
+    public static function authorization(): bool|JsonResource
     {
         self::$connection = Connection::getConnection();
 
         $headers = getallheaders();
         $jsonResource = new JsonResource();
 
-        if (array_key_exists('Authorization', $headers) && preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
-            $token = $matches[1];
+        if (!array_key_exists('Authorization', $headers)) return $jsonResource->toJson(403, 'É necessário informar o token de autorização.');
 
-            if (!!$result = self::validateToken($token)) {
-                $userId = $result['user_id'];
+        if (!preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) return $jsonResource->toJson(401, 'O token de autorização está inválido.');
 
-                if (self::authentication($userId)) return true;
-                else
-                    return $jsonResource->toJson(404, 'Usuário inexistente.');
-            } else
-                return $jsonResource->toJson(401, 'O token de autorização está inválido.');
-        } else
-            return $jsonResource->toJson(403, 'É necessário informar o token de autorização.');
+        $token = $matches[1];
+        $result = self::validateToken($token);
+
+        if (!$result) return $jsonResource->toJson(401, 'O token de autorização está inválido.');
+
+        $userId = $result['user_id'];
+
+        if (!self::authentication($userId)) return $jsonResource->toJson(404, 'Usuário inexistente.');
+
+        return true;
     }
 
-    private static function validateToken($token)
+    private static function validateToken(string $token): array|bool
     {
         $TokenDAO = new TokenDAO(self::$connection);
         $Token = new Token();
 
         $Token->setToken($token);
-        $result = $TokenDAO->getTokenByTokenAndExpirationDate($Token);
 
-        return (!!$result) ? $result : false;
+        return $TokenDAO->getTokenByTokenAndExpirationDate($Token);
     }
 
-    private static function authentication($userId)
+    private static function authentication(int $userId): bool
     {
         $UserDAO = new UserDAO(self::$connection);
         $User = new User();
 
         $User->setId($userId);
-        if (!!$result = $UserDAO->getUserById($User)) {
+        $result = $UserDAO->getUserById($User);
+
+        if ($result !== false) {
             Session::put('user', $result);
 
             return true;
-        } else return false;
+        }
+
+        return false;
     }
 }
