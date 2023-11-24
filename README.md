@@ -84,7 +84,7 @@ _A autenticação HTTP é feita usando o sistema de autorização **Bearer Token
 }
 ```
 
-- **POST** /phones/**{_id_}** _"phone_number" é válido somente se o número informado possuir o formato (DDD) 9999-6666 ou (DDD) 9999-6666, o campo de "description" é opcional_
+- **PUT** /phones/**{_id_}** _"phone_number" é válido somente se o número informado possuir o formato (DDD) 9999-6666 ou (DDD) 9999-6666, o campo de "description" é opcional_
 ```JSON
 {
     "phone_number": "(41) 99999-6666",
