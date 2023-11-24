@@ -92,6 +92,8 @@ _A autenticação HTTP é feita usando o sistema de autorização **Bearer Token
 }
 ```
 
+- **DELETE** /phones/**{_id_}**
+
 ## **Tecnologias**
 ### Construção
 - **PHP 8.1.x**
